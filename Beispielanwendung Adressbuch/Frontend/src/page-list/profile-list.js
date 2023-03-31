@@ -1,12 +1,12 @@
 "use strict";
 
 import Page from "../page.js";
-import HtmlTemplate from "./page-list.html";
+import HtmlTemplate from "./profile-list.html";
 
 /**
- * Klasse PageList: Stellt die Listenübersicht zur Verfügung
+ * Klasse ProfileList: Stellt die Listenübersicht der Profile zur Verfügung
  */
-export default class PageList extends Page {
+export default class ProfileList extends Page {
     /**
      * Konstruktor.
      *
@@ -36,10 +36,10 @@ export default class PageList extends Page {
     async init() {
         // HTML-Inhalt nachladen
         await super.init();
-        this._title = "Übersicht";
+        this._title = "Profil Übersicht";
 
         // Platzhalter anzeigen, wenn noch keine Daten vorhanden sind
-        let data = await this._app.backend.fetch("GET", "/address");
+        let data = await this._app.backend.fetch("GET", "/profile");
         this._emptyMessageElement = this._mainElement.querySelector(".empty-placeholder");
 
         if (data.length) {
@@ -72,25 +72,25 @@ export default class PageList extends Page {
             olElement.appendChild(liElement);
 
             // Event Handler registrieren
-            liElement.querySelector(".action.edit").addEventListener("click", () => location.hash = `#/edit/${dataset._id}`);
+            liElement.querySelector(".action.edit").addEventListener("click", () => location.hash = `#/edit-profile/${dataset._id}`);
             liElement.querySelector(".action.delete").addEventListener("click", () => this._askDelete(dataset._id));
         }
     }
 
     /**
-     * Löschen der übergebenen Adresse. Zeigt einen Popup, ob der Anwender
-     * die Adresse löschen will und löscht diese dann.
+     * Löschen des übergebenen Profils. Zeigt einen Popup, ob der Anwender
+     * das Profil löschen will und löscht dieses dann.
      *
      * @param {Integer} id ID des zu löschenden Datensatzes
      */
     async _askDelete(id) {
         // Sicherheitsfrage zeigen
-        let answer = confirm("Soll die ausgewählte Adresse wirklich gelöscht werden?");
+        let answer = confirm("Soll das ausgewählte Profil wirklich gelöscht werden?");
         if (!answer) return;
 
         // Datensatz löschen
         try {
-            this._app.backend.fetch("DELETE", `/address/${id}`);
+            this._app.backend.fetch("DELETE", `/profile/${id}`);
         } catch (ex) {
             this._app.showException(ex);
             return;
