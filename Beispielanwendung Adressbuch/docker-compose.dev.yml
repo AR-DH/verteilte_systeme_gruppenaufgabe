@@ -1,0 +1,108 @@
+#===============================================================================
+# Docker Compose File für die lokale Entwicklung. Startet die folgenden Dienste:
+#
+#  * Ein MongoDB, die im internen Container-Netz für die anderen Container unter
+#    dem Hostnamen "mongodb" auf dem Standardport 27017 erreichbar ist.
+#
+#  * Ein grafisches Admin-Werkzeug für Mongo, das unter http://localhost:8081
+#    im Browser aufgerufen werden kann
+#
+#  * Eine NodeJS-Laufzeitumgebung, in welcher der Backend-Quellcode ausgeführt
+#    wird. Änderungen am Quellcode führen zu einem automatischen Neustart des
+#    Services. Der REST-Webservice kann unter http://localhost:3000 aufgerufen
+#    werden. Unter dem Standardport 9229 kann sich ein JavaScript-Debugger
+#    (z.B. aus dem Chrome Dev Tools) verbinden.
+#
+#  * Eine NodeJS-Laufzeitumgebung, in welcher der Frontend-Quellcode gebaut
+#    und unter der Adresse http://localhost:8080 zum Aufruf im Browser
+#    bereitgestellt wird. Auch hier führen Änderungen am Quellcode zu einem
+#    automatischen Neustart, so dass lediglich im Browser die Seite neugeladen
+#    werden muss.
+#
+# Stand 02/2022 wäre es auch möglich gewesen, die Dienste für Entwicklung und
+# Produktivbetrieb in einem einzigen Docker Compose File zu bündeln, und anhand
+# von Profilen zu unterscheiden, ob die Entwicklungs- oder Produktivservices
+# gestartet werden sollen. Vgl. https://docs.docker.com/compose/profiles/
+# Dies wird aktuell aber noch nicht von dem unter Linux verbreiteten Tool
+# "podman-compose" unterstützt, so dass wir hier weiterhin getrennte Dateien
+# verwenden.
+#===============================================================================
+version: "3.9"
+
+services:
+    # MongoDB-Datenbank
+    mongodb:
+        image: mongo
+        restart: always
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: dbuser
+            MONGO_INITDB_ROOT_PASSWORD: dbpass
+        volumes:
+            - dbdata:/data/db
+            - dbconfig:/data/configdb
+
+    # Admin-GUI für MongoDB
+    mongo-gui:
+        image: mongo-express
+        restart: always
+        ports:
+            - 8081:8081
+        environment:
+            ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+            ME_CONFIG_MONGODB_ADMINPASSWORD: admin
+            ME_CONFIG_MONGODB_URL: mongodb://dbuser:dbpass@mongodb:27017/
+
+    # Adressbuch-Backend (Entwicklungsmodus)
+    backend:
+        depends_on:
+            - mongodb
+        image: node:17-alpine
+        restart: always
+        environment:
+            HOST: "::"
+            PORT: 3000
+            MONGODB: mongodb://dbuser:dbpass@mongodb:27017/
+        ports:
+            - 3000:3000
+            - 9229:9229
+        volumes:
+            - ./Backend:/app
+        working_dir: /app
+        command: sh -c "npm i; npm start"
+
+    # Adressbuch-Frontend (Entwicklungsmodus)
+    frontend:
+        image: node:17-alpine
+        restart: always
+        environment:
+            # Die URL des Backends kann durch die Umgebungsvariable API_URL
+            # beim Aufruf von Docker Compose übersteuert werden. Sie wird an
+            # die gleichnamige Umgebungsvariable im Container durchgereicht
+            # und von dort für die Single Page App via HTTP abrufbar gemacht.
+            # In einem echten Produktivsetup müsste hier statt localhost
+            # natürlich ein richtiger Hostname eingetragen werden.
+            API_URL: ${API_URL:-http://localhost:8080/api}
+        ports:
+            - 4000:8080
+        volumes:
+            - ./Frontend:/app
+        working_dir: /app
+        command: sh -c "npm i; npm start"
+
+    # Gateway-Server
+    gateway:
+        depends_on:
+            - backend
+            - frontend
+        build:
+            context: ./Gateway
+        restart: always
+        ports:
+            - 8080:81
+        environment:
+            API_URL: ${API_URL:-http://backend:3000/}
+            FRONTEND_URL: ${FRONTEND_URL:-http://frontend:8080/}
+
+volumes:
+    dbdata:
+    dbconfig:

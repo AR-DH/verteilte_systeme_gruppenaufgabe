@@ -1,0 +1,88 @@
+#===============================================================================
+# Docker Compose File für die Produktivnutzung. Startet die folgenden Dienste:
+#
+#  * Ein MongoDB, die im internen Container-Netz für die anderen Container unter
+#    dem Hostnamen "mongodb" auf dem Standardport 27017 erreichbar ist.
+#
+#  * Das REST-Backend der Anwendung, für welches ein auf nodeJS aufbauendes
+#    Container-Image gebaut wird. Der REST-Webservice kann unter
+#    http://localhost:3000 aufgerufen werden.
+#
+#  * Das Frontend der Anwendung, für welches ein auf nginx aufbauendes
+#    Container-Image gebaut wird. Das Frontend kann unter der Adresse
+#    http://localhost:8080 aufgerufen werden.
+#
+# Stand 02/2022 wäre es auch möglich gewesen, die Dienste für Entwicklung und
+# Produktivbetrieb in einem einzigen Docker Compose File zu bündeln, und anhand
+# von Profilen zu unterscheiden, ob die Entwicklungs- oder Produktivservices
+# gestartet werden sollen. Vgl. https://docs.docker.com/compose/profiles/
+# Dies wird aktuell aber noch nicht von dem unter Linux verbreiteten Tool
+# "podman-compose" unterstützt, so dass wir hier weiterhin getrennte Dateien
+# verwenden.
+#===============================================================================
+version: "3.9"
+
+services:
+    # MongoDB-Datenbank
+    mongodb:
+        image: mongo
+        restart: always
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: dbuser
+            MONGO_INITDB_ROOT_PASSWORD: dbpass
+        volumes:
+            - dbdata:/data/db
+            - dbconfig:/data/configdb
+
+    # Adressbuch-Backend (Produktivmodus)
+    backend:
+        build:
+            context: ./Backend
+        depends_on:
+            - mongodb
+        restart: always
+        environment:
+            HOST: "::"
+            PORT: 3000
+            MONGODB: mongodb://dbuser:dbpass@mongodb:27017/
+        deploy:
+            # Beispiel für die Skalierung mit drei parallelen Instanzen.
+            # Die Anzahl kann beim Aufruf von `docker-compose` durch den
+            # Parameter `--scale backend=…` übersteuert werden.
+            replicas: 3
+
+    # Adressbuch-Frontend (Produktivmodus)
+    frontend:
+        build:
+            context: ./Frontend
+        restart: always
+        environment:
+            # Die URL des Backends kann durch die Umgebungsvariable API_URL
+            # beim Aufruf von Docker Compose übersteuert werden. Sie wird an
+            # die gleichnamige Umgebungsvariable im Container durchgereicht
+            # und von dort für die Single Page App via HTTP abrufbar gemacht.
+            # In einem echten Produktivsetup müsste hier statt localhost
+            # natürlich ein richtiger Hostname eingetragen werden.
+            API_URL: ${API_URL:-http://localhost:8080/api}
+        deploy:
+            replicas: 2
+
+    # Gateway-Server
+    gateway:
+        depends_on:
+            - backend
+            - frontend
+        build:
+            context: ./Gateway
+        restart: always
+        ports:
+            - 8080:81
+        environment:
+            API_URL: ${API_URL:-http://backend:3000/}
+            FRONTEND_URL: ${FRONTEND_URL:-http://frontend:80/}
+        deploy:
+            replicas: 2
+
+volumes:
+    dbdata:
+    dbconfig:

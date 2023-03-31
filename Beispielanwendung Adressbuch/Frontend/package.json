@@ -1,0 +1,26 @@
+{
+    "name": "adressbuch-frontent",
+    "version": "1.0.0",
+    "description": "Adressbuch: Frontend",
+    "author": "Dennis Schulmeister-Zimolong",
+    "license": "CC-BY-4.0",
+    "type": "module",
+    "scripts": {
+        "clean": "node scripts/clean.js",
+        "build": "npm run clean; node scripts/build-static.js; node scripts/esbuild-bundle.js",
+        "start": "node scripts/esbuild-serve.js"
+    },
+    "config": {
+        "src_dir": "src",
+        "static_dir": "static",
+        "build_dir": "build",
+        "public_url": "",
+        "replace_variables_extensions": ".htm; .html"
+    },
+    "devDependencies": {
+        "esbuild": "^0.14.23",
+        "esbuild-plugin-less": "^1.1.6",
+        "shelljs": "^0.8.5"
+    },
+    "dependencies": {}
+}

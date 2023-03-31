@@ -1,0 +1,59 @@
+# ==============================================================================
+# nignx-Konfiguration für einen einfachen Gateway-Server, der sämtliche
+# Anfragen an einen oder mehrere Docker Container im selben virtuellen
+# Netzwerk weiterleitet.
+#
+# Vgl. https://nginx.org/en/docs/beginners_guide.html
+# Vgl. https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_pass
+# Vgl. https://nginx.org/en/docs/http/load_balancing.html
+# ==============================================================================
+server {
+    # Workadround für Podman im Rootless-Mode (02/2022), Port 80 ist schon
+    # durch das Frontend belegt, weil Podman anders als Docker kein echtes
+    # virtuelles Netzwerk erzeugt.
+    listen                   81;
+    server_name              localhost;
+
+    # Indem das Dockerfile so erweitert wird, dass statische Webinhalte in
+    # das Verzeichnis /usr/share/nginx/html hineinkopiert oder externe Inhalte
+    # als Volume eingeblendet werden, kann der Gateway-Server auch Inhalte wie
+    # eine API-Dokumentation, eine Landing Page oder die Frontend-SPA hosten.
+    location / {
+        # Statische Webinhalte
+        root   /usr/share/nginx/html;
+        index  index.html index.htm;
+
+        # HTTP Header für die Weiterleitung an die Backend-Dienste setzen
+        proxy_set_header  Host  $host;
+        proxy_set_header  X-Real-IP  $remote_addr;
+        proxy_set_header  X-Forwarded-For  $proxy_add_x_forwarded_for;
+        proxy_set_header  X-Forwarded-Proto  $scheme;
+    }
+
+    # Eigene Fehlerseiten für 404 (Not Found) und 50x (Internal Server Error),
+    # falls gewünscht. Wenn diese Zeilen einkommentiert werden, muss das
+    # Dockerfile so erweitert werden, dass entsprechende HTML-Dateien beim
+    # Bauen nach /usr/share/nginx/html in das Image hinein kopiert werden.
+    #error_page  404              /404.html;
+    #error_page  500 502 503 504  /50x.html;
+
+    # Bei Aufruf der Wurzeladresse den Anwender an die Frontend-App umleiten.
+    # Ebenso, wenn bei /app der Slash am Ende fehlt, weil sonst relativen Pfade
+    # innerhalb der SPA nicht funktionieren würden.
+    location ~ ^/$ {
+        return  301  $scheme://$http_host/app/;
+    }
+
+    location ~ ^/app$ {
+        return  301  $scheme://$http_host/app/;
+    }
+
+    # Proxy-Weiterleitungsregeln
+    location /app/ {
+        proxy_pass  ${FRONTEND_URL};
+    }
+
+    location /api/ {
+        proxy_pass  ${API_URL};
+    }
+}

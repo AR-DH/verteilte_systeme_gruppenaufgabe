@@ -1,0 +1,23 @@
+{
+  "name": "adressbuch-backend",
+  "version": "1.0.0",
+  "description": "Adressbuch: Backend",
+  "author": "Dennis Schulmeister-Zimolong",
+  "license": "CC-BY-4.0",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "nodemon --inspect=0.0.0.0:9229 src/index.js",
+    "mongo-start": "docker run -d --name mongodb -p 27017:27017 mongo",
+    "mongo-stop": "docker stop mongodb; docker container rm mongodb"
+  },
+  "dependencies": {
+    "@dschulmeis/restify-openapi-enforcer-middleware": "^1.0.2",
+    "mongodb": "^4.4.0",
+    "openapi-enforcer": "^1.17.0",
+    "restify": "^8.6.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
