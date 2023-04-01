@@ -31,39 +31,72 @@ class DatabaseFactory {
      * wenigstens gleich ein paar Daten.
      */
     async _createDemoData() {
-        let addresses = this.database.collection("addresses");
+        let profiles = this.database.collection("profiles");
+        let bookings = this.database.collection("bookings");
 
         if (await addresses.estimatedDocumentCount() === 0) {
-            addresses.insertMany([
+            profiles.insertMany([
                 {
-                    first_name: "Willy",
-                    last_name: "Tanner",
+                    first_name: "Anthony",
+                    last_name: "Rudtke",
                     phone: "+49 711 564412",
-                    email: "willy.tanner@alf.com",
+                    email: "anthony.rudtke@alf.com",
                 },
                 {
-                    first_name: "Michael",
-                    last_name: "Knight",
+                    first_name: "Angela",
+                    last_name: "Merkel",
                     phone: "+49 721 554194",
-                    email: "michael@knight-rider.com",
+                    email: "angela@merkel.com",
                 },
                 {
-                    first_name: "Fox",
-                    last_name: "Mulder",
+                    first_name: "Kai",
+                    last_name: "Simon",
                     phone: "+49 721 553181",
-                    email: "mulder@xfiles.com",
+                    email: "kai.fabian@simon.com",
                 },
                 {
-                    first_name: "Dana",
-                    last_name: "Scully",
+                    first_name: "Chenyu",
+                    last_name: "Qiu",
                     phone: "+49 721 572287",
-                    email: "scully@xfiles.com",
+                    email: "chenyu@qiu.com",
                 },
                 {
                     first_name: "Elwood",
                     last_name: "Blues",
                     phone: "+49 721 957338",
                     email: "elwood@blues-brothers.com",
+                },
+            ]);
+        }
+        if (await bookings.estimatedDocumentCount() === 0) {
+            bookings.insertMany([
+                {
+                    court: "Halle 1",
+                    equipment: "5x Bälle, 30x Hütchen",
+                    time: "17:00-20:00, 01.01.2023",
+                    name_coach: "Pierre Hollandaise",
+                    member: "Kai Simon, Anthony Rudtke, Chenyu Qiu, Peter Altmaier",
+                },
+                {
+                    court: "Feld Walldorf Mitte",
+                    equipment: "4x Bälle, 20x Hütchen",
+                    time: "19:00-21:00, 03.01.2023",
+                    name_coach: "Pierre Hollandaise",
+                    member: "Dietmar Hopp, Anton Schlecker, Markus Lanz, Christian Lindner",
+                },
+                {
+                    court: "Feld Walldorf Mitte",
+                    equipment: "2x Bälle",
+                    time: "17:00-19:00, 01.01.2023",
+                    name_coach: "Lukas Podolski",
+                    member: "Manuel Brecht",
+                },
+                {
+                    court: "Halle 2",
+                    equipment: "3x Bälle, 15x Hütchen",
+                    time: "17:00-20:00, 01.01.2023",
+                    name_coach: "Lukas Podolski",
+                    member: "Kai Gustav, Benjamin Carlsen, Luis Kayed",
                 },
             ]);
         }

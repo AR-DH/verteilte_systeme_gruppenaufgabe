@@ -8,7 +8,7 @@ import "./app.css";
  * Hauptklasse App: Steuert die gesamte Anwendung
  *
  * Diese Klasse erzeugt den Single Page Router zur Navigation innerhalb
- * der Anwendung und ein Datenbankobjekt zur Verwaltung der Adressliste.
+ * der Anwendung und ein Datenbankobjekt zur Verwaltung der Listen.
  * Darüber hinaus beinhaltet sie verschiedene vom Single Page Router
  * aufgerufene Methoden, zum Umschalten der aktiven Seite.
  */
@@ -23,17 +23,17 @@ class App {
         // Single Page Router zur Steuerung der sichtbaren Inhalte
         this.router = new Router([
             {
-                url: "^/$",
-                show: () => this._gotoList()
+                url: "^/profiles",
+                show: () => this._gotoProfileList()
             },{
-                url: "^/new/$",
-                show: () => this._gotoNew()
+                url: "^/edit-profile/(.*)$",
+                show: () => this._gotoProfileEdit()
             },{
-                url: "^/edit/(.*)$",
-                show: matches => this._gotoEdit(matches[1]),
+                url: "^/booking",
+                show: () => this._gotoBookingList()
             },{
-                url: ".*",
-                show: () => this._gotoList()
+                url: "^/edit-booking/(.*)$",
+                show: matches => this._gotoBookingEdit(matches[1]),
             },
         ]);
 
@@ -64,14 +64,26 @@ class App {
     /**
      * Übersichtsseite anzeigen. Wird vom Single Page Router aufgerufen.
      */
-    async _gotoList() {
+    async _gotoProfileList() {
         try {
             // Dynamischer Import, vgl. https://javascript.info/modules-dynamic-imports
-            let {default: PageList} = await import("./page-list/page-list.js");
+            let {default: ProfileList} = await import("./page-list/profile-list.js");
 
-            let page = new PageList(this);
+            let page = new ProfileList(this);
             await page.init();
-            this._showPage(page, "list");
+            this._showPage(page, "profile-list");
+        } catch (ex) {
+            this.showException(ex);
+        }
+    }
+    async _gotoBookingList() {
+        try {
+            // Dynamischer Import, vgl. https://javascript.info/modules-dynamic-imports
+            let {default: BookingList} = await import("./page-list/booking-list.js");
+
+            let page = new BookingList(this);
+            await page.init();
+            this._showPage(page, "booking-list");
         } catch (ex) {
             this.showException(ex);
         }
@@ -81,18 +93,32 @@ class App {
      * Seite zum Anlegen einer neuen Adresse anzeigen.  Wird vom Single Page
      * Router aufgerufen.
      */
-    async _gotoNew() {
+    /*async _gotoProfileNew() {
         try {
             // Dynamischer Import, vgl. https://javascript.info/modules-dynamic-imports
-            let {default: PageEdit} = await import("./page-edit/page-edit.js");
+            let {default: ProfileEdit} = await import("./page-edit/profile-edit.js");
 
-            let page = new PageEdit(this);
+            let page = new ProfileEdit(this);
             await page.init();
             this._showPage(page, "new");
         } catch (ex) {
             this.showException(ex);
         }
     }
+    async _gotoBookingNew() {
+        try {
+            // Dynamischer Import, vgl. https://javascript.info/modules-dynamic-imports
+            let {default: BookingEdit} = await import("./page-edit/booking-edit.js");
+
+            let page = new BookingEdit(this);
+            await page.init();
+            this._showPage(page, "new");
+        } catch (ex) {
+            this.showException(ex);
+        }
+    }
+    Fehlerursprung?
+    */
 
     /**
      * Seite zum Bearbeiten einer Adresse anzeigen.  Wird vom Single Page
@@ -100,14 +126,24 @@ class App {
      *
      * @param {Number} id ID der zu bearbeitenden Adresse
      */
-    async _gotoEdit(id) {
+    async _gotoProfileEdit(id) {
         try {
             // Dynamischer Import, vgl. https://javascript.info/modules-dynamic-imports
-            let {default: PageEdit} = await import("./page-edit/page-edit.js");
-
-            let page = new PageEdit(this, id);
+            let {default: ProfileEdit} = await import("./page-edit/profile-edit.js");
+            let page = new ProfileEdit(this, id);
             await page.init();
-            this._showPage(page, "edit");
+            this._showPage(page, "editProfile");
+        } catch (ex) {
+            this.showException(ex);
+        }
+    }
+    async _gotoBookingEdit(id) {
+        try {
+            // Dynamischer Import, vgl. https://javascript.info/modules-dynamic-imports
+            let {default: BookingEdit} = await import("./page-edit/booking-edit.js");
+            let page = new BookingEdit(this, id);
+            await page.init();
+            this._showPage(page, "editBooking");
         } catch (ex) {
             this.showException(ex);
         }
