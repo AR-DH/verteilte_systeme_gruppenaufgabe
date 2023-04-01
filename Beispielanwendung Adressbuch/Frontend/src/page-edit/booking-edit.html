@@ -1,0 +1,69 @@
+<!-- Stylesheet der Seite -->
+<style>
+    /* FORMULARFELDER */
+    main {
+        background-color: white;
+        padding: 1em;
+    }
+
+    main .form > * {
+        display: block;
+        width: 100%;
+
+        border: 0px solid lightgrey;
+        border-bottom-width: 1px;
+
+        padding: 0.5em 0 0.5em 0;
+        margin-bottom: 1em;
+    }
+
+    /* AKTIONSBUTTONS */
+    main .actions {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    main .actions > div {
+        padding: 0.5em;
+        margin: 0.5em;
+
+        background-color: #bad3bc;
+        transition: background-color 0.5s;
+
+        flex: 1;
+        text-align: center;
+
+        border-radius: 1em;
+    }
+
+    main .actions > div:first-child {
+        margin-left: 0;
+    }
+
+    main .actions > div:last-child {
+        margin-right: 0;
+    }
+
+    main .actions > div:hover {
+        background-color: #f0f0f0;
+        cursor: pointer;
+    }
+</style>
+
+<!-- Inhalt der Seite -->
+<main>
+    <div>
+        <div class="form">
+            <input class="court" placeholder="Platz" value="$COURT$" />
+            <input class="equipment" placeholder="Ausstattung" value="$EQUIPMENT$" />
+            <input class="time" placeholder="Zeit" value="$TIME$" />
+            <input class="name_coach" placeholder="Trainername" value="$NAME_COACH$" />
+            <input class="member" placeholder="Mitglied" value="$MEMBER$" />
+        </div>
+        <div class="actions">
+            <div class="action save">
+                <a>✔</a>
+            </div>
+        </div>
+    </div>
+</main>
