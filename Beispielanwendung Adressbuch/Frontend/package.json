@@ -1,7 +1,7 @@
 {
-    "name": "adressbuch-frontent",
+    "name": "golfclub-frontent",
     "version": "1.0.0",
-    "description": "Adressbuch: Frontend",
+    "description": "Golfclub: Frontend",
     "author": "Dennis Schulmeister-Zimolong",
     "license": "CC-BY-4.0",
     "type": "module",

@@ -93,15 +93,15 @@ server.use(OpenApiEnforcerMiddleware(openApiEnforcer));
 
 // HTTP-Controller registrieren
 new RootController(server, "/", openApiFile);
-new ProfileController(server, "/profile");
 new BookingController(server, "/booking");
 new TournamentController(server, "/tournament");
+new ProfileController(server, "/profile");
 
 // Server tatsächlich starten
 server.listen(config.port, config.host, function() {
     console.log();
     console.log("=================");
-    console.log("Fußballclubmanagement-Server");
+    console.log("Golfclub-Server");
     console.log("=================");
     console.log();
     console.log("Ausführung mit folgender Konfiguration:");

@@ -12,7 +12,6 @@ Inhaltsverzeichnis
 
 Kurzbeschreibung
 ----------------
-
 Dies ist die clientseitige Single Page App mit dem Frontend des Adressbuchs.
 Es handelt sich dabei um eine einfache Webanwendung, die mit VanillaJS
 (also einfachem JavaScript) ohne zusätzlichem Framework realisiert wurde.
