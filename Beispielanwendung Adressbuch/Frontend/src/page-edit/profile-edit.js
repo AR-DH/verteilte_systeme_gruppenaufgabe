@@ -1,7 +1,7 @@
 "use strict";
 
 import Page from "../page.js";
-import HtmlTemplate from "./page-edit.html";
+import HtmlTemplate from "./profile-edit.html";
 
 /**
  * Klasse ProfileEdit: Stellt die Seite zum Anlegen oder Bearbeiten eines Profils

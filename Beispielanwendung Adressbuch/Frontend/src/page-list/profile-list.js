@@ -4,7 +4,7 @@ import Page from "../page.js";
 import HtmlTemplate from "./profile-list.html";
 
 /**
- * Klasse ProfileList: Stellt die Listenübersicht der Profile zur Verfügung
+ * Klasse ProfileList: Stellt die Listenübersicht zur Verfügung
  */
 export default class ProfileList extends Page {
     /**

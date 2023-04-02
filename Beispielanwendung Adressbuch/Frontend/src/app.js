@@ -8,7 +8,7 @@ import "./app.css";
  * Hauptklasse App: Steuert die gesamte Anwendung
  *
  * Diese Klasse erzeugt den Single Page Router zur Navigation innerhalb
- * der Anwendung und ein Datenbankobjekt zur Verwaltung der Listen.
+ * der Anwendung und ein Datenbankobjekt zur Verwaltung der Liste.
  * Darüber hinaus beinhaltet sie verschiedene vom Single Page Router
  * aufgerufene Methoden, zum Umschalten der aktiven Seite.
  */
@@ -29,19 +29,22 @@ class App {
             {
                 url: "^/profiles",
                 show: () => this._gotoProfileList()
-            },{
-                url: "^/edit-profile/(.*)$",
-                show: () => this._gotoProfileEdit()
-            },{
+            },
+            {
                 url: "^/booking",
                 show: () => this._gotoBookingList()
             },{
-                url: "^/edit-booking/(.*)$",
-                show: matches => this._gotoBookingEdit(matches[1]),
-            },
-            {
                 url: "^/edit-tournament/(.*)$",
                 show: matches => this._gotoTournamentEdit(matches[1]),
+            },
+            
+            {
+                url: "^/edit-profile/(.*)$",
+                show: matches => this._gotoProfileEdit(matches[1]),
+            },
+            {
+                url: "^/edit-booking/(.*)$",
+                show: matches => this._gotoBookingEdit(matches[1]),
             },{
                 url: ".*",
                 show: () => this._gotoTournamentList()
@@ -85,8 +88,8 @@ class App {
             this._showPage(page, "profile-list");
         } catch (ex) {
             this.showException(ex);
-        }
     }
+}
     async _gotoBookingList() {
         try {
             // Dynamischer Import, vgl. https://javascript.info/modules-dynamic-imports
@@ -97,62 +100,38 @@ class App {
             this._showPage(page, "booking-list");
         } catch (ex) {
             this.showException(ex);
-        }
     }
-    async _gotoTournamentList() {
-        try {
-            // Dynamischer Import, vgl. https://javascript.info/modules-dynamic-imports
-            let {default: TournamentList} = await import("./page-list/tournament-list.js");
-    
-            let page = new TournamentList(this);
-            await page.init();
-            this._showPage(page, "tournament-list");
-        } catch (ex) {
-            this.showException(ex);
-    }
-    }
+}
+async _gotoTournamentList() {
+    try {
+        // Dynamischer Import, vgl. https://javascript.info/modules-dynamic-imports
+        let {default: TournamentList} = await import("./page-list/tournament-list.js");
+
+        let page = new TournamentList(this);
+        await page.init();
+        this._showPage(page, "tournament-list");
+    } catch (ex) {
+        this.showException(ex);
+}
+}
+
 
     /**
-     * Seite zum Anlegen einer neuen Adresse anzeigen.  Wird vom Single Page
+     * Seite zum Anlegen einer neuen Entität anzeigen.  Wird vom Single Page
      * Router aufgerufen.
      */
-    /*async _gotoProfileNew() {
-        try {
-            // Dynamischer Import, vgl. https://javascript.info/modules-dynamic-imports
-            let {default: ProfileEdit} = await import("./page-edit/profile-edit.js");
-
-            let page = new ProfileEdit(this);
-            await page.init();
-            this._showPage(page, "new");
-        } catch (ex) {
-            this.showException(ex);
-        }
-    }
-    async _gotoBookingNew() {
-        try {
-            // Dynamischer Import, vgl. https://javascript.info/modules-dynamic-imports
-            let {default: BookingEdit} = await import("./page-edit/booking-edit.js");
-
-            let page = new BookingEdit(this);
-            await page.init();
-            this._showPage(page, "new");
-        } catch (ex) {
-            this.showException(ex);
-        }
-    }
-    Fehlerursprung?
-    */
 
     /**
-     * Seite zum Bearbeiten einer Adresse anzeigen.  Wird vom Single Page
+     * Seite zum Bearbeiten einer Entität anzeigen.  Wird vom Single Page
      * Router aufgerufen.
      *
-     * @param {Number} id ID der zu bearbeitenden Adresse
+     * @param {Number} id ID der zu bearbeitenden Entität
      */
     async _gotoProfileEdit(id) {
         try {
             // Dynamischer Import, vgl. https://javascript.info/modules-dynamic-imports
             let {default: ProfileEdit} = await import("./page-edit/profile-edit.js");
+
             let page = new ProfileEdit(this, id);
             await page.init();
             this._showPage(page, "editProfile");
@@ -164,9 +143,22 @@ class App {
         try {
             // Dynamischer Import, vgl. https://javascript.info/modules-dynamic-imports
             let {default: BookingEdit} = await import("./page-edit/booking-edit.js");
+
             let page = new BookingEdit(this, id);
             await page.init();
             this._showPage(page, "editBooking");
+        } catch (ex) {
+            this.showException(ex);
+        }
+    }
+    async _gotoTournamentEdit(id) {
+        try {
+            // Dynamischer Import, vgl. https://javascript.info/modules-dynamic-imports
+            let {default: TournamentEdit} = await import("./page-edit/tournament-edit.js");
+
+            let page = new TournamentEdit(this, id);
+            await page.init();
+            this._showPage(page, "editTournament");
         } catch (ex) {
             this.showException(ex);
         }

@@ -29,11 +29,11 @@ export default class BookingEdit extends Page {
         };
 
         // Eingabefelder
-        this._courtInput        = null;
-        this._equipmentInput    = null;
-        this._timeInput         = null;
-        this._name_coachInput   = null;
-        this._memberInput       = null;
+        this._courtInput = null;
+        this._equipmentInput  = null;
+        this._timeInput     = null;
+        this._name_coachInput     = null;
+        this._memberInput     = null;
     }
 
     /**
@@ -79,11 +79,11 @@ export default class BookingEdit extends Page {
         saveButton.addEventListener("click", () => this._saveAndExit());
 
         // Eingabefelder zur späteren Verwendung merken
-        this._courtInput        = this._mainElement.querySelector("input.court");
-        this._equipmentInput    = this._mainElement.querySelector("input.equipment");
-        this._timeInput         = this._mainElement.querySelector("input.time");
-        this._name_coachInput   = this._mainElement.querySelector("input.name_coach");
-        this._memberInput       = this._mainElement.querySelector("input.member");
+        this._courtInput = this._mainElement.querySelector("input.court");
+        this._equipmentInput  = this._mainElement.querySelector("input.equipment");
+        this._timeInput     = this._mainElement.querySelector("input.time");
+        this._name_coachInput     = this._mainElement.querySelector("input.name_coach");
+        this._memberInput     = this._mainElement.querySelector("input.member");
     }
 
     /**
@@ -93,11 +93,11 @@ export default class BookingEdit extends Page {
     async _saveAndExit() {
         // Eingegebene Werte prüfen
         this._dataset._id        = this._editId;
-        this._dataset.court      = this._courtInput.value.trim();
+        this._dataset.court = this._courtInput.value.trim();
         this._dataset.equipment  = this._equipmentInput.value.trim();
-        this._dataset.time       = this._timeInput.value.trim();
-        this._dataset.name_coach = this._name_coachInput.value.trim();
-        this._dataset.member     = this._memberInput.value.trim();
+        this._dataset.time     = this._timeInput.value.trim();
+        this._dataset.name_coach      = this._name_coachInput.value.trim();
+        this._dataset.member      = this._memberInput.value.trim();
 
         if (!this._dataset.court) {
             alert("Geben Sie erst einen Platz ein.");
