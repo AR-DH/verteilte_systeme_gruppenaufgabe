@@ -23,6 +23,10 @@ class App {
         // Single Page Router zur Steuerung der sichtbaren Inhalte
         this.router = new Router([
             {
+                url: "^/tournaments",
+                show: () => this._gotoTournamentList()
+            },
+            {
                 url: "^/profiles",
                 show: () => this._gotoProfileList()
             },{
@@ -34,6 +38,13 @@ class App {
             },{
                 url: "^/edit-booking/(.*)$",
                 show: matches => this._gotoBookingEdit(matches[1]),
+            },
+            {
+                url: "^/edit-tournament/(.*)$",
+                show: matches => this._gotoTournamentEdit(matches[1]),
+            },{
+                url: ".*",
+                show: () => this._gotoTournamentList()
             },
         ]);
 
@@ -87,6 +98,18 @@ class App {
         } catch (ex) {
             this.showException(ex);
         }
+    }
+    async _gotoTournamentList() {
+        try {
+            // Dynamischer Import, vgl. https://javascript.info/modules-dynamic-imports
+            let {default: TournamentList} = await import("./page-list/tournament-list.js");
+    
+            let page = new TournamentList(this);
+            await page.init();
+            this._showPage(page, "tournament-list");
+        } catch (ex) {
+            this.showException(ex);
+    }
     }
 
     /**

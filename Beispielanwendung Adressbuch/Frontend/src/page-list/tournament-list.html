@@ -1,0 +1,94 @@
+<!-- Stylesheet der Seite -->
+<style>
+    /* LISTENEINTRÄGE */
+    main ol {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    main li {
+        margin: 0;
+        padding: 1em;
+        padding-bottom: 0.5em;
+
+        background-color: rgb(255, 255, 255);
+        transition: background-color 0.5s;
+
+        border: 0px solid rgb(187, 183, 183);
+        border-bottom-width: 1px;
+    }
+
+    main li:hover {
+        background-color: #fafafa;
+    }
+
+    main .name {
+        font-size: 150%;
+    }
+
+    /* AKTIONSBUTTONS */
+    main .actions {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    main .actions > div {
+        padding: 0.5em;
+        margin: 0.5em;
+
+        background-color: #bad3bc;
+        transition: background-color 0.5s;
+
+        flex: 1;
+        text-align: center;
+
+        border-radius: 1em;
+    }
+
+    main .actions > div:first-child {
+        margin-left: 0;
+    }
+
+    main .actions > div:last-child {
+        margin-right: 0;
+    }
+
+    main .actions > div:hover {
+        background-color: #f0f0f0;
+        cursor: pointer;
+    }
+</style>
+
+<!-- Inhalt der Seite -->
+<main>
+    <ol>
+        <!-- Platzhalter für eine leere Liste -->
+        <li class="empty-placeholder">
+            <div class="name">
+                Keine Einträge vorhanden
+            </div>
+        </li>
+
+        <!-- Vorlage für einen Eintrag in der Liste -->
+        <li class="list-entry" data-id="$ID$">
+            <div class="name">
+                $TOURNAMENT_NAME$
+            </div>
+            <div class="field tournament_court">
+                $TOURNAMENT_COURT$
+            </div>
+            <div class="field date">
+                $DATE$
+            </div>
+            <div class="actions">
+                <div class="action edit">
+                    <a>✎</a>
+                </div>
+                <div class="action delete">
+                    <a>✖</a>
+                </div>
+            </div>
+        </li>
+    </ol>
+</main>
