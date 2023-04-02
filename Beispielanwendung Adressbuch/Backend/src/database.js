@@ -20,9 +20,10 @@ class DatabaseFactory {
         // Datenbankverbindung herstellen
         this.client = new MongoClient(connectionUrl);
         await this.client.connect();
-        this.database = this.client.db("adressbook");
+        this.database = this.client.db("golfclubbook");
 
         await this._createDemoData();
+        
     }
 
     /**
@@ -33,71 +34,80 @@ class DatabaseFactory {
     async _createDemoData() {
         let profiles = this.database.collection("profiles");
         let bookings = this.database.collection("bookings");
+        let tournaments = this.database.collection("tournaments");
 
-        if (await addresses.estimatedDocumentCount() === 0) {
+        if (await profiles.estimatedDocumentCount() === 0) {
             profiles.insertMany([
                 {
-                    first_name: "Anthony",
-                    last_name: "Rudtke",
+                    first_name: "Salih",
+                    last_name: "Kut",
                     phone: "+49 711 564412",
-                    email: "anthony.rudtke@alf.com",
+                    email: "salih.kut@abc.com",
                 },
                 {
-                    first_name: "Angela",
-                    last_name: "Merkel",
+                    first_name: "Mirac",
+                    last_name: "Asal",
                     phone: "+49 721 554194",
-                    email: "angela@merkel.com",
+                    email: "mirac@asal.com",
                 },
                 {
-                    first_name: "Kai",
-                    last_name: "Simon",
+                    first_name: "Luca",
+                    last_name: "D'Oria",
                     phone: "+49 721 553181",
-                    email: "kai.fabian@simon.com",
+                    email: "luca@doria.com",
                 },
                 {
-                    first_name: "Chenyu",
-                    last_name: "Qiu",
+                    first_name: "Dietmar",
+                    last_name: "Hopp",
                     phone: "+49 721 572287",
-                    email: "chenyu@qiu.com",
+                    email: "hopp@sap.com",
                 },
                 {
-                    first_name: "Elwood",
-                    last_name: "Blues",
+                    first_name: "Warren",
+                    last_name: "Buffet",
                     phone: "+49 721 957338",
-                    email: "elwood@blues-brothers.com",
+                    email: "buffet@berkshire.com",
                 },
             ]);
         }
         if (await bookings.estimatedDocumentCount() === 0) {
             bookings.insertMany([
                 {
-                    court: "Halle 1",
-                    equipment: "5x Bälle, 30x Hütchen",
+                    court: "8-hole",
+                    equipment: "3x Golfschläger, 15x Golfbälle",
                     time: "17:00-20:00, 01.01.2023",
-                    name_coach: "Pierre Hollandaise",
-                    member: "Kai Simon, Anthony Rudtke, Chenyu Qiu, Peter Altmaier",
+                    name_coach: "Tiger Woods",
+                    member: "Mirac Asal",
                 },
                 {
-                    court: "Feld Walldorf Mitte",
-                    equipment: "4x Bälle, 20x Hütchen",
+                    court: "16-hole",
+                    equipment: "1x Golfschläger, 30x Golfbälle",
                     time: "19:00-21:00, 03.01.2023",
-                    name_coach: "Pierre Hollandaise",
-                    member: "Dietmar Hopp, Anton Schlecker, Markus Lanz, Christian Lindner",
+                    name_coach: "Tiger Woods",
+                    member: "Salih Kut",
                 },
                 {
-                    court: "Feld Walldorf Mitte",
-                    equipment: "2x Bälle",
+                    court: "8-hole",
+                    equipment: "1x Golfkart, 15x Golfbälle",
                     time: "17:00-19:00, 01.01.2023",
-                    name_coach: "Lukas Podolski",
-                    member: "Manuel Brecht",
+                    name_coach: "Kevin James",
+                    member: "Luca D'Oria",
                 },
                 {
-                    court: "Halle 2",
-                    equipment: "3x Bälle, 15x Hütchen",
+                    court: "Schlagplatz",
+                    equipment: "3x Golfschläger, 30x Golfbälle",
                     time: "17:00-20:00, 01.01.2023",
-                    name_coach: "Lukas Podolski",
-                    member: "Kai Gustav, Benjamin Carlsen, Luis Kayed",
+                    name_coach: "Tiger Woods",
+                    member: "Dietmar Hopp",
                 },
+                {
+                    court: "8-hole",
+                    equipment: "1x Golfschläger, 10x Golfbälle, 1x Golftasche",
+                    time: "14:00-17:00, 04.01.2023",
+                    name_coach: "Markus Maier",
+                    member: "Warren Buffet",
+                },
+                
             ]);
         }
         if (await tournaments.estimatedDocumentCount() === 0) {

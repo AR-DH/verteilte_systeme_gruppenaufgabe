@@ -1,124 +1,102 @@
 "use strict"
 
-import TournamentService from "../service/tournament.service.js";
-import {wrapHandler} from "../utils.js";
-import RestifyError from "restify-errors";
+import DatabaseFactory from "../database.js";
+import {ObjectId} from "mongodb";
 
 /**
- * HTTP-Controller-Klasse für Turniereinträge. Diese Klasse registriert
- * alle notwendigen URL-Handler beim Webserver für einen einfachen REST-
- * Webservice zum Lesen und Schreiben von Turnieren.
+ * Geschäftslogik zur Verwaltung von Turniereinträgen. Diese Klasse implementiert die
+ * eigentliche Anwendungslogik losgelöst vom technischen Übertragungsweg.
+ * Die Turniereinträge werden der Einfachheit halber in einer MongoDB abgelegt.
  */
-export default class TournamentController {
+export default class TournamentService {
     /**
-     * Konstruktor. Hier werden die URL-Handler registrert.
+     * Konstruktor.
+     */
+    constructor() {
+        this._tournaments = DatabaseFactory.database.collection("tournaments");
+    }
+
+    /**
+     * Turniere suchen. Unterstützt wird lediglich eine ganz einfache Suche,
+     * bei der einzelne Felder auf exakte Übereinstimmung geprüft werden.
+     * Zwar unterstützt MongoDB prinzipiell beliebig komplexe Suchanfragen.
+     * Um das Beispiel klein zu halten, wird dies hier aber nicht unterstützt.
      *
-     * @param {Object} server Restify Serverinstanz
-     * @param {String} prefix Gemeinsamer Prefix aller URLs
+     * @param {Object} query Optionale Suchparameter
+     * @return {Promise} Liste der gefundenen Turniere
      */
-    constructor(server, prefix) {
-        this._service = new TournamentService();
-        this._prefix = prefix;
+    async search(query) {
+        let cursor = this._tournaments.find(query, {
+            sort: {
+                tournament_name: 1,
+            }
+        });
 
-        // Collection: Turniere
-        server.get(prefix, wrapHandler(this, this.search));
-        server.post(prefix, wrapHandler(this, this.create));
-
-        // Entity: Turnier
-        server.get(prefix + "/:id", wrapHandler(this, this.read));
-        server.put(prefix + "/:id", wrapHandler(this, this.update));
-        server.patch(prefix + "/:id", wrapHandler(this, this.update));
-        server.del(prefix + "/:id", wrapHandler(this, this.delete));
+        return cursor.toArray();
     }
 
     /**
-     * Hilfsmethode zum Einfügen von HATEOAS-Links in einen Datensatz.
-     * Dem Datensatz wird ein Attribut `_links` gemäß der OpenAPI-Spezifikation
-     * hinzugefügt, damit ein Client erkennen kann, wie er die Entität lesen,
-     * ändern oder löschen kann.
+     * Speichern eines neuen Turniereintrags.
      *
-     * @param {Object} entity Zu verändernder Datensatz.
+     * @param {Object} tournament Zu speichernde Turnierdaten
+     * @return {Promise} Gespeicherte Turnierdaten
      */
-    _insertHateoasLinks(entity) {
-        let url = `${this._prefix}/${entity._id}`;
+    async create(tournament) {
+        tournament = tournament || {};
 
-        entity._links = {
-            read:   {url: url, method: "GET"},
-            update: {url: url, method: "PUT"},
-            patch:  {url: url, method: "PATCH"},
-            delete: {url: url, method: "DELETE"},
-        }
+        let newTournament = {
+            tournament_name: tournament.tournament_name || "",
+            tournament_court: tournament.tournament_court || "",
+            date: tournament.date || "",
+        };
+
+        let result = await this._tournaments.insertOne(newTournament);
+        return await this._tournaments.findOne({_id: result.insertedId});
     }
 
     /**
-     * GET /tournament
-     * Turniere suchen
+     * Auslesen eines vorhandenen Turniers anhand ihrer ID.
+     *
+     * @param {String} id ID des gesuchten Turniers
+     * @return {Promise} Gefundene Turnierdaten
      */
-    async search(req, res, next) {
-        let result = await this._service.search(req.query);
-        result.forEach(entity => this._insertHateoasLinks(entity));
-        res.sendResult(result);
-        return next();
+    async read(id) {
+        let result = await this._tournaments.findOne({_id: new ObjectId(id)});
+        return result;
     }
 
     /**
-     * POST /tournament
-     * Neues Turnier anlegen
+     * Aktualisierung eines Turniers, durch Überschreiben einzelner Felder
+     * oder des gesamten Turnierobjekts (ohne die ID).
+     *
+     * @param {String} id ID des gesuchten Turniers
+     * @param {[type]} tournament Zu speichernde Turnierdaten
+     * @return {Promise} Gespeicherte Turnierdaten oder undefined
      */
-    async create(req, res, next) {
-        let result = await this._service.create(req.body);
-        this._insertHateoasLinks(result);
+    async update(id, tournament) {
+        let oldTournament = await this._tournaments.findOne({_id: new ObjectId(id)});
+        if (!oldTournament) return;
 
-        res.status(201);
-        res.header("Location", `${this._prefix}/${result._id}`);
-        res.sendResult(result);
-
-        return next();
-    }
-
-    /**
-     * GET /tournament/:id
-     * Turnier auslesen
-     */
-    async read(req, res, next) {
-        let result = await this._service.read(req.params.id);
-
-        if (result) {
-            this._insertHateoasLinks(result);
-            res.sendResult(result);
-        } else {
-            throw new RestifyError.NotFoundError("Turnier nicht gefunden");
+        let updateDoc = {
+            $set: {},
         }
 
-        return next();
+        if (tournament.tournament_name) updateDoc.$set.tournament_name   = tournament.tournament_name;
+        if (tournament.tournament_court) updateDoc.$set.tournament_court = tournament.tournament_court;
+        if (tournament.date)      updateDoc.$set.date                    = tournament.date;
+
+        await this._tournaments.updateOne({_id: new ObjectId(id)}, updateDoc);
+        return this._tournaments.findOne({_id: new ObjectId(id)});
     }
 
     /**
-     * PUT /tournament/:id
-     * PATCH /tournament/:id
-     * Turnier ändern
+     * Löschen eines Turniereintrags anhand ihrer ID.
+     *
+     * @param {String} id ID des gesuchten Turniers
+     * @return {Promise} Anzahl der gelöschten Datensätze
      */
-    async update(req, res, next) {
-        let result = await this._service.update(req.params.id, req.body);
-
-        if (result) {
-            this._insertHateoasLinks(result);
-            res.sendResult(result);
-        } else {
-            throw new RestifyError.NotFoundError("Turnier nicht gefunden");
-        }
-
-        return next();
-    }
-
-    /**
-     * DELETE /tournament/:id
-     * Turnier löschen
-     */
-    async delete(req, res, next) {
-        await this._service.delete(req.params.id)
-        res.status(204);
-        res.sendResult({});
-        return next();
+    async delete(id) {
+        let result = await this._tournaments.deleteOne({_id: new ObjectId(id)});
+        return result.deletedCount;
     }
 }

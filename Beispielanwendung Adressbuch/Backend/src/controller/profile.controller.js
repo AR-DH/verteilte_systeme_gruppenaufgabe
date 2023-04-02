@@ -11,7 +11,7 @@ import RestifyError from "restify-errors";
  */
 export default class ProfileController {
     /**
-     * Konstruktor. Hier werden die URL-Handler registriert.
+     * Konstruktor. Hier werden die URL-Handler registrert.
      *
      * @param {Object} server Restify Serverinstanz
      * @param {String} prefix Gemeinsamer Prefix aller URLs
@@ -37,7 +37,7 @@ export default class ProfileController {
      * hinzugefügt, damit ein Client erkennen kann, wie er die Entität lesen,
      * ändern oder löschen kann.
      *
-     * @param {Object} entity Zu verändernder Datensatz
+     * @param {Object} entity Zu verändernder Datensatz.
      */
     _insertHateoasLinks(entity) {
         let url = `${this._prefix}/${entity._id}`;
@@ -51,7 +51,7 @@ export default class ProfileController {
     }
 
     /**
-     * GET /address
+     * GET /profil
      * Profile suchen
      */
     async search(req, res, next) {
