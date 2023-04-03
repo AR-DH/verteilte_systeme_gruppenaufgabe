@@ -84,10 +84,10 @@ export default class TournamentEdit extends Page {
      */
     async _saveAndExit() {
         // Eingegebene Werte prüfen
-        this._dataset._id        = this._editId;
-        this._dataset.tournament_name = this._tournamentNameInput.value.trim();
+        this._dataset._id                   = this._editId;
+        this._dataset.tournament_name       = this._tournamentNameInput.value.trim();
         this._dataset.tournament_court      = this._tournamentCourtInput.value.trim();
-        this._dataset.date      = this._dateInput.value.trim();
+        this._dataset.date                  = this._dateInput.value.trim();
 
         if (!this._dataset.tournament_name) {
             alert("Geben Sie erst eine Turnierbezeichnung ein.");

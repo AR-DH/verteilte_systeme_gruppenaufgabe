@@ -92,12 +92,12 @@ export default class BookingEdit extends Page {
      */
     async _saveAndExit() {
         // Eingegebene Werte prüfen
-        this._dataset._id        = this._editId;
-        this._dataset.court = this._courtInput.value.trim();
-        this._dataset.equipment  = this._equipmentInput.value.trim();
-        this._dataset.time     = this._timeInput.value.trim();
-        this._dataset.name_coach      = this._name_coachInput.value.trim();
-        this._dataset.member      = this._memberInput.value.trim();
+        this._dataset._id           = this._editId;
+        this._dataset.court         = this._courtInput.value.trim();
+        this._dataset.equipment     = this._equipmentInput.value.trim();
+        this._dataset.time          = this._timeInput.value.trim();
+        this._dataset.name_coach    = this._name_coachInput.value.trim();
+        this._dataset.member        = this._memberInput.value.trim();
 
         if (!this._dataset.court) {
             alert("Geben Sie erst einen Platz ein.");

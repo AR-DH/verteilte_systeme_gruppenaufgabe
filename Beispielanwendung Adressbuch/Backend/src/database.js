@@ -20,7 +20,7 @@ class DatabaseFactory {
         // Datenbankverbindung herstellen
         this.client = new MongoClient(connectionUrl);
         await this.client.connect();
-        this.database = this.client.db("golfclubbook");
+        this.database = this.client.db("soccerclubbook");
 
         await this._createDemoData();
         
@@ -39,22 +39,22 @@ class DatabaseFactory {
         if (await profiles.estimatedDocumentCount() === 0) {
             profiles.insertMany([
                 {
-                    first_name: "Salih",
-                    last_name: "Kut",
+                    first_name: "Ralph",
+                    last_name: "Radermacher",
                     phone: "+49 711 564412",
-                    email: "salih.kut@abc.com",
+                    email: "ralph.radermacher@sap.com",
                 },
                 {
-                    first_name: "Mirac",
-                    last_name: "Asal",
+                    first_name: "Yannik",
+                    last_name: "Jakob",
                     phone: "+49 721 554194",
-                    email: "mirac@asal.com",
+                    email: "yannik@jakob.com",
                 },
                 {
-                    first_name: "Luca",
-                    last_name: "D'Oria",
+                    first_name: "Rolf-Dieter",
+                    last_name: "Härter",
                     phone: "+49 721 553181",
-                    email: "luca@doria.com",
+                    email: "itil-weiterbildung@gmail.com",
                 },
                 {
                     first_name: "Dietmar",
@@ -63,49 +63,49 @@ class DatabaseFactory {
                     email: "hopp@sap.com",
                 },
                 {
-                    first_name: "Warren",
-                    last_name: "Buffet",
+                    first_name: "Anthony",
+                    last_name: "Rudtke",
                     phone: "+49 721 957338",
-                    email: "buffet@berkshire.com",
+                    email: "anthony@abc.com",
                 },
             ]);
         }
         if (await bookings.estimatedDocumentCount() === 0) {
             bookings.insertMany([
                 {
-                    court: "8-hole",
-                    equipment: "3x Golfschläger, 15x Golfbälle",
+                    court: "Halle 1 Kirrlach",
+                    equipment: "5x Bälle, 20x Hütchen",
                     time: "17:00-20:00, 01.01.2023",
-                    name_coach: "Tiger Woods",
-                    member: "Mirac Asal",
+                    name_coach: "Lukas Podolski",
+                    member: "Anthony Rudtke, Kai Simon, Chenyu Qiu, Philipp Pohl",
                 },
                 {
-                    court: "16-hole",
-                    equipment: "1x Golfschläger, 30x Golfbälle",
+                    court: "Feld Kirrlach Mitte",
+                    equipment: "3x Bälle, 15x Hütchen",
                     time: "19:00-21:00, 03.01.2023",
-                    name_coach: "Tiger Woods",
-                    member: "Salih Kut",
+                    name_coach: "Sebastian Rudy",
+                    member: "Kai Simon, Yannick Rennings",
                 },
                 {
-                    court: "8-hole",
-                    equipment: "1x Golfkart, 15x Golfbälle",
+                    court: "Feld Kirrlach-St.Leon-Rot",
+                    equipment: "2x Bälle, 15x Hütchen",
                     time: "17:00-19:00, 01.01.2023",
-                    name_coach: "Kevin James",
-                    member: "Luca D'Oria",
+                    name_coach: "Michael Trauth-Finck",
+                    member: "Kai Simon",
                 },
                 {
-                    court: "Schlagplatz",
-                    equipment: "3x Golfschläger, 30x Golfbälle",
+                    court: "Feld Kirrlach Mitte",
+                    equipment: "5x Bälle, 20x Hütchen",
                     time: "17:00-20:00, 01.01.2023",
-                    name_coach: "Tiger Woods",
-                    member: "Dietmar Hopp",
+                    name_coach: "Pierre Hollandaise",
+                    member: "Kai Simon, Luca D'Oria, Ulrich Bach",
                 },
                 {
-                    court: "8-hole",
-                    equipment: "1x Golfschläger, 10x Golfbälle, 1x Golftasche",
+                    court: "Halle 2 Kirrlach",
+                    equipment: "4x Bälle, 15x Hütchen",
                     time: "14:00-17:00, 04.01.2023",
-                    name_coach: "Markus Maier",
-                    member: "Warren Buffet",
+                    name_coach: "Marvin Schmid",
+                    member: "Warren Buffet, Dietmar Hopp, Elon Musk",
                 },
                 
             ]);
@@ -113,28 +113,28 @@ class DatabaseFactory {
         if (await tournaments.estimatedDocumentCount() === 0) {
             tournaments.insertMany([
                 {
-                    tournament_name: "Karlsruhe-Open",
-                    tournament_court: "8-hole",
+                    tournament_name: "Karlsruhe-Cup",
+                    tournament_court: "KSC Arena",
                     date: "02.04.2023",
                 },
                 {
-                    tournament_name: "SAP-Open",
-                    tournament_court: "16-hole",
+                    tournament_name: "SAP-Cup",
+                    tournament_court: "SAP Arena",
                     date: "09.04.2023",
                 },
                 {
                     tournament_name: "Baden-Open",
-                    tournament_court: "8-hole",
+                    tournament_court: "Feld Kirrlach Mitte",
                     date: "10.04.2023",
                 },
                 {
                     tournament_name: "Deutsche Meisterschaft",
-                    tournament_court: "16-hole",
+                    tournament_court: "Alianz Arena",
                     date: "16.04.2023",
                 },
                 {
                     tournament_name: "Kids-Cup",
-                    tournament_court: "4-hole",
+                    tournament_court: "Halle 1 Kirrlach",
                     date: "23.04.2023",
                 },
                 
