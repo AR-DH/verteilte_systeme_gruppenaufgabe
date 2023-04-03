@@ -28,7 +28,8 @@ export default class ProfileService {
     async search(query) {
         let cursor = this._profil.find(query, {
             sort: {
-                profil_name: 1,
+                first_name: 1,
+                last_name: 1,
             }
         });
 
@@ -45,7 +46,8 @@ export default class ProfileService {
         profil = profil || {};
 
         let newProfil = {
-            profil_name: profil.profil_name || "",
+            first_name: profil.first_name || "",
+            last_name: profil.last_name ||"",
             profil_phone: profil.profil_phone || "",
             date: profil.email || "",
         };
