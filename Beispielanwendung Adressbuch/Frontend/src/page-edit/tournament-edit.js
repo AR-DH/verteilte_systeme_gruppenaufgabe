@@ -1,13 +1,13 @@
 "use strict";
 
 import Page from "../page.js";
-import HtmlTemplate from "./profile-edit.html";
+import HtmlTemplate from "./tournament-edit.html";
 
 /**
- * Klasse ProfileEdit: Stellt die Seite zum Anlegen oder Bearbeiten eines Profils
+ * Klasse PageEdit: Stellt die Seite zum Anlegen oder Bearbeiten eines Turniers
  * zur Verfügung.
  */
-export default class ProfileEdit extends Page {
+export default class TournamentEdit extends Page {
     /**
      * Konstruktor.
      *
@@ -21,17 +21,15 @@ export default class ProfileEdit extends Page {
         this._editId = editId;
 
         this._dataset = {
-            first_name: "",
-            last_name: "",
-            phone: "",
-            email: "",
+            tournament_name: "",
+            tournament_court: "",
+            date: "",
         };
 
         // Eingabefelder
-        this._firstNameInput = null;
-        this._lastNameInput  = null;
-        this._phoneInput     = null;
-        this._emailInput     = null;
+        this._tournamentNameInput = null;
+        this._tournamentCourtInput  = null;
+        this._dateInput     = null;
     }
 
     /**
@@ -55,20 +53,19 @@ export default class ProfileEdit extends Page {
 
         // Bearbeiteten Datensatz laden
         if (this._editId) {
-            this._url = `/profile/${this._editId}`;
+            this._url = `/tournament/${this._editId}`;
             this._dataset = await this._app.backend.fetch("GET", this._url);
-            this._title = `${this._dataset.first_name} ${this._dataset.last_name}`;
+            this._title = `${this._dataset.tournament_name}`;
         } else {
-            this._url = `/profile`;
-            this._title = "Profil hinzufügen";
+            this._url = `/tournament`;
+            this._title = "Turnier hinzufügen";
         }
 
         // Platzhalter im HTML-Code ersetzen
         let html = this._mainElement.innerHTML;
-        html = html.replace("$LAST_NAME$", this._dataset.last_name);
-        html = html.replace("$FIRST_NAME$", this._dataset.first_name);
-        html = html.replace("$PHONE$", this._dataset.phone);
-        html = html.replace("$EMAIL$", this._dataset.email);
+        html = html.replace("$TOURNAMENT_NAME$", this._dataset.tournament_name);
+        html = html.replace("$TOURNAMENT_COURT$", this._dataset.tournament_court);
+        html = html.replace("$DATE$", this._dataset.date);
         this._mainElement.innerHTML = html;
 
         // Event Listener registrieren
@@ -76,10 +73,9 @@ export default class ProfileEdit extends Page {
         saveButton.addEventListener("click", () => this._saveAndExit());
 
         // Eingabefelder zur späteren Verwendung merken
-        this._firstNameInput = this._mainElement.querySelector("input.first_name");
-        this._lastNameInput  = this._mainElement.querySelector("input.last_name");
-        this._phoneInput     = this._mainElement.querySelector("input.phone");
-        this._emailInput     = this._mainElement.querySelector("input.email");
+        this._tournamentNameInput = this._mainElement.querySelector("input.tournament_name");
+        this._tournamentCourtInput     = this._mainElement.querySelector("input.tournament_court");
+        this._dateInput     = this._mainElement.querySelector("input.date");
     }
 
     /**
@@ -89,18 +85,12 @@ export default class ProfileEdit extends Page {
     async _saveAndExit() {
         // Eingegebene Werte prüfen
         this._dataset._id        = this._editId;
-        this._dataset.first_name = this._firstNameInput.value.trim();
-        this._dataset.last_name  = this._lastNameInput.value.trim();
-        this._dataset.phone      = this._phoneInput.value.trim();
-        this._dataset.email      = this._emailInput.value.trim();
+        this._dataset.tournament_name = this._tournamentNameInput.value.trim();
+        this._dataset.tournament_court      = this._tournamentCourtInput.value.trim();
+        this._dataset.date      = this._dateInput.value.trim();
 
-        if (!this._dataset.first_name) {
-            alert("Geben Sie erst einen Vornamen ein.");
-            return;
-        }
-
-        if (!this._dataset.last_name) {
-            alert("Geben Sie erst einen Nachnamen ein.");
+        if (!this._dataset.tournament_name) {
+            alert("Geben Sie erst eine Turnierbezeichnung ein.");
             return;
         }
 

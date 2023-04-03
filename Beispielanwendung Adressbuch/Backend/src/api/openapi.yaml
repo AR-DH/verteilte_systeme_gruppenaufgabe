@@ -1,237 +1,426 @@
-openapi: 3.0.0
+openapi: 3.1.2
 info:
-  title: Adressbuch
-  description: "Die Adressbuch-App nutzt einen simplen REST-Webservices zur Kommunikation\
-    \ mit dem Backend. Dieser ermöglicht die üblichen CRUD-Operationen zur Suche,\
-    \ Anzeige, Bearbeitung und Löschung von Adressen, wobei jede Adresse aus einem\
-    \ Vornamen, Nachnamen, Telefonnummer und eine E-Mailadresse besteht."
-  contact:
-    name: Dennis Schulmeister-Zimolong
-    url: https://www.wpvs.de
-    email: dhbw@windows3.de
-  license:
-    name: CC-BY-4.0
-    url: https://creativecommons.org/licenses/by/4.0/deed.de
-  version: "1.0"
+  title: Golfclub-Management
+  version: 1.0.0
+  description: "Die Golfclub-Management-Anwendung nutzt einen simplen REST-Webservice\
+    \ zur Kommunikation mit dem Backend. Dieser ermöglicht die üblichen CRUD-Operationen\
+    \ zur Anzeige und Bearbeitung von Mitgliedschaften, wobei jede Mitgliedschaft\
+    \ aus einem Vornamen, Nachnamen, Telefonnummer und E-Mailadresse besteht. Auß\
+    erdem ermöglicht er eine Buchungsmöglichkeit, die Felder für Golfplatz, Equipment,\
+    \ Vorname und Nachname eines Coachs, den Preis und eine Zeit enthält. Des Weiteren\
+    \ gibt es eine Anzeige für Golfturniere mit anschließender Anmeldemöglichkeit,\
+    \ die aus einem Turniernamen, einem Turnierplatz, einem Datum und dem Vor- und\
+    \ Nachnamen des Teilnehmers besteht."
 servers:
 - url: http://localhost:3000
-tags:
-- name: Index
-- name: Adresse
+  description: Lokaler Entwicklungsserver
 paths:
-  /:
+  /profile:
+    summary: Path used to manage the list of profiles.
+    description: "The REST endpoint/path used to list and create a `Profile` entity.\
+      \  This path contains a `GET` and `POST` operation to perform the profile and\
+      \ create tasks, respectively."
     get:
-      tags:
-      - Index
-      summary: Wurzeladresse des Webservices
-      description: Liefert eine HATEOAS-Übersicht aller collections
-      operationId: index
       responses:
         "200":
-          description: OK
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/HATEOAS_Collection'
-                x-content-type: application/json
-
-  /address:
-    get:
-      tags:
-      - Adresse
-      summary: Adressen suchen
-      description: Suche nach Adressen. Gibt eine Liste aller Adressen passend zu
-        den übergebenen Suchkriterien zurück.
-      operationId: search-address
-      parameters:
-      - name: first_name
-        in: query
-        description: Gesuchter Vorname
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
-      - name: last_name
-        in: query
-        description: Gesuchter Nachname
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
-      - name: phone
-        in: query
-        description: Gesuchte Telefonnummer
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
-      - name: email
-        in: query
-        description: Gesuchte E-Mailadresse
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Address'
-                x-content-type: application/json
+                  $ref: '#/components/schemas/Profile'
+          description: Successful response - returns an array of `Profile` entities.
+      operationId: getProfiles
+      summary: List All Profiles
+      description: Gets a list of `Profile` entities.
     post:
-      tags:
-      - Adresse
-      summary: Adresse anlegen
-      description: "Neue Adresse anlegen. Speichert die übergebene Adresse in der\
-        \ Datenbank. Der Wert des Feldes \"_id\" wird dabei ignoriert, da in jedem Fall\
-        \ eine neue Adresse mit neuer ID angelegt wird."
-      operationId: create-address
       requestBody:
+        description: A new `Profile` to be created.
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Address'
+              $ref: '#/components/schemas/Profile'
+        required: true
       responses:
         "201":
-          description: Created
-          headers:
-            Location:
-              schema:
-                type: string
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Address'
-
-  /address/{id}:
+          description: Successful response.
+      operationId: createProfile
+      summary: Create a Profile
+      description: Creates a new instance of a `Profile`.
+    parameters:
+    - name: first_name
+      description: Vorname
+      schema:
+        type: string
+      in: query
+    - name: last_name
+      description: Nachname
+      schema:
+        type: string
+      in: query
+    - name: phone
+      description: Telefonnummer
+      schema:
+        type: string
+      in: query
+    - name: email
+      description: E-Mailadresse
+      schema:
+        type: string
+      in: query
+    - name: _id
+      description: ID des Profils
+      schema:
+        type: string
+      in: query
+  /profile/{profileId}:
+    summary: Path used to manage a single Profile.
+    description: "The REST endpoint/path used to get, update, and delete single instances\
+      \ of an `Profile`.  This path contains `GET`, `PUT`, and `DELETE` operations\
+      \ used to perform the get, update, and delete tasks, respectively."
     get:
-      tags:
-      - Adresse
-      summary: Adresse lesen
-      description: Liest eine einzelne Adresse vom Server.
-      operationId: get-address
-      parameters:
-      - name: id
-        in: path
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
       responses:
         "200":
-          description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Address'
-        "404":
-          description: Not Found
+                $ref: '#/components/schemas/Profile'
+          description: Successful response - returns a single `Profile`.
+      operationId: getProfile
+      summary: Get a Profile
+      description: Gets the details of a single instance of a `Profile`.
     put:
-      tags:
-      - Adresse überschreiben
-      summary: ""
-      description: "Überschreibt eine vorhandene Adresse auf dem Server. Bis auf die\
-        \ ID können alle Felder geändert werden. Der Versuch, die ID zu ändern, wird\
-        \ vom Server stillschweigend ignoriert."
-      operationId: update-address
-      parameters:
-      - name: id
-        in: path
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
       requestBody:
+        description: Updated `Profile` information.
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Address'
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Address'
-        "404":
-          description: Not Found
-    patch:
-      tags:
-      - Einzelne Felder ändern
-      summary: Einzelne Adressfelder ändern
-      description: "Ändert einzelne Felder einer vorhandenen Adresse. Zulässig sind\
-        \ alle Felder bis auf die ID, da diese nachträglich nicht mehr verändert werden\
-        \ darf."
-      operationId: patch-address
-      parameters:
-      - name: id
-        in: path
+              $ref: '#/components/schemas/Profile'
         required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Address'
       responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Address'
-        "404":
-          description: Not Found
+        "202":
+          description: Successful response.
+      operationId: updateProfile
+      summary: Update a Profile
+      description: Updates an existing `Profile`.
     delete:
-      tags:
-      - Adresse
-      summary: Adresse löschen
-      description: Löscht eine Adresse auf dem Server.
-      operationId: delete-address
-      parameters:
-      - name: id
-        in: path
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
       responses:
         "204":
-          description: No Content
-        "404":
-          description: Not Found
-
+          description: Successful response.
+      operationId: deleteProfile
+      summary: Delete a Profile
+      description: Deletes an existing `Profile`.
+    patch:
+      requestBody:
+        description: Zu ändernde Felder
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Profile'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+          description: OK
+    parameters:
+    - name: profileId
+      description: A unique identifier for a `Profile`.
+      schema:
+        type: string
+      in: path
+      required: true
+  /booking:
+    summary: Path used to manage the list of bookings.
+    description: "The REST endpoint/path used to list and create zero or more `booking`\
+      \ entities.  This path contains a `GET` and `POST` operation to perform the\
+      \ list and create tasks, respectively."
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/booking'
+          description: Successful response - returns an array of `booking` entities.
+      operationId: getbookings
+      summary: List All bookings
+      description: Gets a list of all `booking` entities.
+    post:
+      requestBody:
+        description: A new `booking` to be created.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/booking'
+        required: true
+      responses:
+        "201":
+          description: Successful response.
+      operationId: createbooking
+      summary: Create a booking
+      description: Creates a new instance of a `booking`.
+    parameters:
+    - name: court
+      description: Golfplatz zum Buchen
+      schema:
+        type: string
+      in: query
+    - name: equipment
+      description: Equipment zum Buchen
+      schema:
+        type: string
+      in: query
+    - name: time
+      description: Zeitraum der Buchung
+      schema:
+        type: string
+      in: query
+    - name: name_coach
+      description: Vorname des gebuchten Coachs
+      schema:
+        type: string
+      in: query
+    - name: member
+      description: Name des Mitglieds
+      schema:
+        type: string
+      in: query
+    - name: _id
+      description: ID einer Buchung
+      schema:
+        type: string
+      in: query
+  /booking/{bookingId}:
+    summary: Path used to manage a single booking.
+    description: "The REST endpoint/path used to get, update, and delete single instances\
+      \ of an `booking`.  This path contains `GET`, `PUT`, and `DELETE` operations\
+      \ used to perform the get, update, and delete tasks, respectively."
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/booking'
+          description: Successful response - returns a single `booking`.
+      operationId: getbooking
+      summary: Get a booking
+      description: Gets the details of a single instance of a `booking`.
+    put:
+      requestBody:
+        description: Updated `booking` information.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/booking'
+        required: true
+      responses:
+        "202":
+          description: Successful response.
+      operationId: updatebooking
+      summary: Update a booking
+      description: Updates an existing `booking`.
+    delete:
+      responses:
+        "204":
+          description: Successful response.
+      operationId: deletebooking
+      summary: Delete a booking
+      description: Deletes an existing `booking`.
+    patch:
+      requestBody:
+        description: Zu ändernde Felder
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/booking'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/booking'
+          description: OK
+    parameters:
+    - name: bookingId
+      description: A unique identifier for a `booking`.
+      schema:
+        type: string
+      in: path
+      required: true
+  /tournament:
+    summary: Path used to manage the list of trournament-lists.
+    description: "The REST endpoint/path used to list and create zero or more `trournament-list`\
+      \ entities.  This path contains a `GET` and `POST` operation to perform the\
+      \ list and create tasks, respectively."
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/tournament'
+          description: Successful response - returns an array of `trournament` entities.
+      operationId: gettournaments
+      summary: List All tournaments
+      description: Gets a list of all `tournament` entities.
+    post:
+      requestBody:
+        description: A new `trournament-list` to be created.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/tournament'
+        required: true
+      responses:
+        "201":
+          description: Successful response.
+      operationId: createtrournament-list
+      summary: Create a trournament-list
+      description: Creates a new instance of a `trournament-list`.
+    patch:
+      requestBody:
+        description: Zu ändernde Felder
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/tournament'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tournament'
+          description: OK
+    parameters:
+    - name: tournament_name
+      description: Turnierbezeichnung
+      schema:
+        type: string
+      in: query
+    - name: tournament_court
+      description: Spielstätte des Turniers
+      schema:
+        type: string
+      in: query
+    - name: date
+      description: Datum
+      schema:
+        type: string
+      in: query
+    - name: _id
+      description: ID eines Turniers
+      schema:
+        type: string
+      in: query
+  /tournament/{tournamentId}:
+    summary: Path used to manage a single trournament-list.
+    description: "The REST endpoint/path used to get, update, and delete single instances\
+      \ of an `trournament-list`.  This path contains `GET`, `PUT`, and `DELETE` operations\
+      \ used to perform the get, update, and delete tasks, respectively."
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tournament'
+          description: Successful response - returns a single `trournament`.
+      operationId: gettournament
+      summary: Get a tournament
+      description: Gets the details of a single instance of a `tournament`.
+    put:
+      requestBody:
+        description: Updated `trournament-list` information.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/tournament'
+        required: true
+      responses:
+        "202":
+          description: Successful response.
+      operationId: updatetrournament-list
+      summary: Update a trournament-list
+      description: Updates an existing `trournament-list`.
+    delete:
+      responses:
+        "204":
+          description: Successful response.
+      operationId: deletetrournament-list
+      summary: Delete a trournament-list
+      description: Deletes an existing `trournament-list`.
+    parameters:
+    - name: tournamentId
+      description: A unique identifier for a `trournament-list`.
+      schema:
+        type: string
+      in: path
+      required: true
 components:
   schemas:
-    HATEOAS_Collection:
-      title: HATEOAS-Links einer Collection
+    Profile:
+      title: Root Type for Profile
+      description: Mitgliedschaft verwalten
       type: object
       properties:
-        _name:
+        first_name:
           type: string
-        query:
-          $ref: '#/components/schemas/HATEOAS_Link'
-        create:
-          $ref: '#/components/schemas/HATEOAS_Link'
-
+        last_name:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        _links:
+          $ref: '#/components/schemas/HATEOAS_Resource'
+          description: ""
+        _id:
+          description: ID des Profils
+          type: string
+      example:
+        _id: ad77
+        first_name: Peter
+        last_name: Parker
+        email: parker@xfiles.com
+        phone: +49 846 029461
+    booking:
+      title: Root Type for booking
+      description: "Buchungsliste von Equipment, Platz und Golfcoach"
+      type: object
+      properties:
+        court:
+          type: string
+        equipment:
+          type: string
+        time:
+          type: string
+        _links:
+          $ref: '#/components/schemas/HATEOAS_Resource'
+          description: ""
+        member:
+          description: Name des Mitglieds
+          type: string
+        name_coach:
+          type: string
+        _id:
+          description: ID der Buchung
+          type: string
+      example:
+        _id: js73972
+        court: 8-hole
+        equipment: ballbucket
+        time: 18:00-20:00
+        name_coach: Tiger Woods
     HATEOAS_Resource:
-      title: HATEOAS-Links einer Resource
+      title: Root Type for HATEOAS_Resource
+      description: HATEOAS-Links einer Resource
       type: object
       properties:
         read:
@@ -242,9 +431,14 @@ components:
           $ref: '#/components/schemas/HATEOAS_Link'
         delete:
           $ref: '#/components/schemas/HATEOAS_Link'
-
+      example:
+        read: ""
+        update: ""
+        patch: ""
+        delete: ""
     HATEOAS_Link:
-      title: HATEOAS-Link
+      title: Root Type for HATEOAS_Link
+      description: HATEOAS-Link
       type: object
       properties:
         url:
@@ -255,28 +449,48 @@ components:
           type: array
           items:
             type: string
-
-    Address:
-      title: Adresse
+    HATEOAS_Collection:
+      title: Root Type for HATEOAS_Collection_Profile
+      description: HATEOAS-Links einer Collection
       type: object
       properties:
+        _name:
+          type: string
+        query:
+          $ref: '#/components/schemas/HATEOAS_Link'
+        create:
+          $ref: '#/components/schemas/HATEOAS_Link'
+      example:
+        _name: ""
+        query: ""
+        create: ""
+    tournament:
+      title: Root Type for trournament-list
+      description: Turnierliste
+      type: object
+      properties:
+        tournament_name:
+          type: string
+        tournament_court:
+          type: string
+        date:
+          type: string
         _links:
           $ref: '#/components/schemas/HATEOAS_Resource'
+          description: ""
         _id:
+          description: ID des Turniers
           type: string
-        first_name:
-          type: string
-        last_name:
-          type: string
-        phone:
-          type: string
-        email:
-          type: string
-          pattern: "(.*@.*\\..*)?"
       example:
-        _id: "621ff9a936997df5baba746e"
-        first_name: "Fox"
-        last_name: "Mulder"
-        email: "mulder@xfiles.com"
-        phone: "+49 721 553181"
-  securitySchemes: {}
+        _id: hd7339
+        tournament_name: Karlsruhe-Open
+        tournament_court: 16-hole
+        date: 20.04.2023
+tags:
+- name: Profil
+  description: Mitgliedschaft verwalten
+- name: Buchung
+  description: "Equipment, Platz und Coach buchen"
+- name: Turnierliste
+  description: Turnierliste mit Anmeldemöglichkeit
+

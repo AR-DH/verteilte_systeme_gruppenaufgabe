@@ -1,12 +1,12 @@
 "use strict";
 
 import Page from "../page.js";
-import HtmlTemplate from "./profile-list.html";
+import HtmlTemplate from "./booking-list.html";
 
 /**
  * Klasse ProfileList: Stellt die Listenübersicht zur Verfügung
  */
-export default class ProfileList extends Page {
+export default class BookingList extends Page {
     /**
      * Konstruktor.
      *
@@ -39,7 +39,7 @@ export default class ProfileList extends Page {
         this._title = "Profil Übersicht";
 
         // Platzhalter anzeigen, wenn noch keine Daten vorhanden sind
-        let data = await this._app.backend.fetch("GET", "/profile");
+        let data = await this._app.backend.fetch("GET", "/booking");
         this._emptyMessageElement = this._mainElement.querySelector(".empty-placeholder");
 
         if (data.length) {
@@ -59,10 +59,11 @@ export default class ProfileList extends Page {
             let html = templateHtml;
 
             html = html.replace("$ID$", dataset._id);
-            html = html.replace("$LAST_NAME$", dataset.last_name);
-            html = html.replace("$FIRST_NAME$", dataset.first_name);
-            html = html.replace("$PHONE$", dataset.phone);
-            html = html.replace("$EMAIL$", dataset.email);
+            html = html.replace("$MEMBER$", dataset.member);
+            html = html.replace("$NAME_COACH$", dataset.name_coach);
+            html = html.replace("$COURT$", dataset.court);
+            html = html.replace("$TIME$", dataset.time);
+            html = html.replace("$EQUIPMENT$", dataset.equipment);
 
             // Element in die Liste einfügen
             let dummyElement = document.createElement("div");
@@ -72,25 +73,25 @@ export default class ProfileList extends Page {
             olElement.appendChild(liElement);
 
             // Event Handler registrieren
-            liElement.querySelector(".action.edit").addEventListener("click", () => location.hash = `#/edit-profile/${dataset._id}`);
+            liElement.querySelector(".action.edit").addEventListener("click", () => location.hash = `#/edit-booking/${dataset._id}`);
             liElement.querySelector(".action.delete").addEventListener("click", () => this._askDelete(dataset._id));
         }
     }
 
     /**
-     * Löschen des übergebenen Profils. Zeigt einen Popup, ob der Anwender
-     * das Profil löschen will und löscht dieses dann.
+     * Löschen des übergebenen Buchungen. Zeigt einen Popup, ob der Anwender
+     * das Profil löschen will und löscht diese dann.
      *
      * @param {Integer} id ID des zu löschenden Datensatzes
      */
     async _askDelete(id) {
         // Sicherheitsfrage zeigen
-        let answer = confirm("Soll das ausgewählte Profil wirklich gelöscht werden?");
+        let answer = confirm("Soll die ausgewählte Buchung wirklich gelöscht werden?");
         if (!answer) return;
 
         // Datensatz löschen
         try {
-            this._app.backend.fetch("DELETE", `/profile/${id}`);
+            this._app.backend.fetch("DELETE", `/booking/${id}`);
         } catch (ex) {
             this._app.showException(ex);
             return;

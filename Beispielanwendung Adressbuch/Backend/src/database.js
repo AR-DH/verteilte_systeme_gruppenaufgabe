@@ -20,9 +20,10 @@ class DatabaseFactory {
         // Datenbankverbindung herstellen
         this.client = new MongoClient(connectionUrl);
         await this.client.connect();
-        this.database = this.client.db("adressbook");
+        this.database = this.client.db("golfclubbook");
 
         await this._createDemoData();
+        
     }
 
     /**
@@ -31,40 +32,112 @@ class DatabaseFactory {
      * wenigstens gleich ein paar Daten.
      */
     async _createDemoData() {
-        let addresses = this.database.collection("addresses");
+        let profiles = this.database.collection("profiles");
+        let bookings = this.database.collection("bookings");
+        let tournaments = this.database.collection("tournaments");
 
-        if (await addresses.estimatedDocumentCount() === 0) {
-            addresses.insertMany([
+        if (await profiles.estimatedDocumentCount() === 0) {
+            profiles.insertMany([
                 {
-                    first_name: "Willy",
-                    last_name: "Tanner",
+                    first_name: "Salih",
+                    last_name: "Kut",
                     phone: "+49 711 564412",
-                    email: "willy.tanner@alf.com",
+                    email: "salih.kut@abc.com",
                 },
                 {
-                    first_name: "Michael",
-                    last_name: "Knight",
+                    first_name: "Mirac",
+                    last_name: "Asal",
                     phone: "+49 721 554194",
-                    email: "michael@knight-rider.com",
+                    email: "mirac@asal.com",
                 },
                 {
-                    first_name: "Fox",
-                    last_name: "Mulder",
+                    first_name: "Luca",
+                    last_name: "D'Oria",
                     phone: "+49 721 553181",
-                    email: "mulder@xfiles.com",
+                    email: "luca@doria.com",
                 },
                 {
-                    first_name: "Dana",
-                    last_name: "Scully",
+                    first_name: "Dietmar",
+                    last_name: "Hopp",
                     phone: "+49 721 572287",
-                    email: "scully@xfiles.com",
+                    email: "hopp@sap.com",
                 },
                 {
-                    first_name: "Elwood",
-                    last_name: "Blues",
+                    first_name: "Warren",
+                    last_name: "Buffet",
                     phone: "+49 721 957338",
-                    email: "elwood@blues-brothers.com",
+                    email: "buffet@berkshire.com",
                 },
+            ]);
+        }
+        if (await bookings.estimatedDocumentCount() === 0) {
+            bookings.insertMany([
+                {
+                    court: "8-hole",
+                    equipment: "3x Golfschläger, 15x Golfbälle",
+                    time: "17:00-20:00, 01.01.2023",
+                    name_coach: "Tiger Woods",
+                    member: "Mirac Asal",
+                },
+                {
+                    court: "16-hole",
+                    equipment: "1x Golfschläger, 30x Golfbälle",
+                    time: "19:00-21:00, 03.01.2023",
+                    name_coach: "Tiger Woods",
+                    member: "Salih Kut",
+                },
+                {
+                    court: "8-hole",
+                    equipment: "1x Golfkart, 15x Golfbälle",
+                    time: "17:00-19:00, 01.01.2023",
+                    name_coach: "Kevin James",
+                    member: "Luca D'Oria",
+                },
+                {
+                    court: "Schlagplatz",
+                    equipment: "3x Golfschläger, 30x Golfbälle",
+                    time: "17:00-20:00, 01.01.2023",
+                    name_coach: "Tiger Woods",
+                    member: "Dietmar Hopp",
+                },
+                {
+                    court: "8-hole",
+                    equipment: "1x Golfschläger, 10x Golfbälle, 1x Golftasche",
+                    time: "14:00-17:00, 04.01.2023",
+                    name_coach: "Markus Maier",
+                    member: "Warren Buffet",
+                },
+                
+            ]);
+        }
+        if (await tournaments.estimatedDocumentCount() === 0) {
+            tournaments.insertMany([
+                {
+                    tournament_name: "Karlsruhe-Open",
+                    tournament_court: "8-hole",
+                    date: "02.04.2023",
+                },
+                {
+                    tournament_name: "SAP-Open",
+                    tournament_court: "16-hole",
+                    date: "09.04.2023",
+                },
+                {
+                    tournament_name: "Baden-Open",
+                    tournament_court: "8-hole",
+                    date: "10.04.2023",
+                },
+                {
+                    tournament_name: "Deutsche Meisterschaft",
+                    tournament_court: "16-hole",
+                    date: "16.04.2023",
+                },
+                {
+                    tournament_name: "Kids-Cup",
+                    tournament_court: "4-hole",
+                    date: "23.04.2023",
+                },
+                
             ]);
         }
     }

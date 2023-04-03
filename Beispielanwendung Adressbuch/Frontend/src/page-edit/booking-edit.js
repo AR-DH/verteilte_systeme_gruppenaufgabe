@@ -1,13 +1,13 @@
 "use strict";
 
 import Page from "../page.js";
-import HtmlTemplate from "./profile-edit.html";
+import HtmlTemplate from "./booking-edit.html";
 
 /**
- * Klasse ProfileEdit: Stellt die Seite zum Anlegen oder Bearbeiten eines Profils
+ * Klasse PageEdit: Stellt die Seite zum Anlegen oder Bearbeiten einer Buchung
  * zur Verfügung.
  */
-export default class ProfileEdit extends Page {
+export default class BookingEdit extends Page {
     /**
      * Konstruktor.
      *
@@ -21,17 +21,19 @@ export default class ProfileEdit extends Page {
         this._editId = editId;
 
         this._dataset = {
-            first_name: "",
-            last_name: "",
-            phone: "",
-            email: "",
+            court: "",
+            equipment: "",
+            time: "",
+            name_coach: "",
+            member: "",
         };
 
         // Eingabefelder
-        this._firstNameInput = null;
-        this._lastNameInput  = null;
-        this._phoneInput     = null;
-        this._emailInput     = null;
+        this._courtInput = null;
+        this._equipmentInput  = null;
+        this._timeInput     = null;
+        this._name_coachInput     = null;
+        this._memberInput     = null;
     }
 
     /**
@@ -55,20 +57,21 @@ export default class ProfileEdit extends Page {
 
         // Bearbeiteten Datensatz laden
         if (this._editId) {
-            this._url = `/profile/${this._editId}`;
+            this._url = `/booking/${this._editId}`;
             this._dataset = await this._app.backend.fetch("GET", this._url);
-            this._title = `${this._dataset.first_name} ${this._dataset.last_name}`;
+            this._title = `${this._dataset.court} ${this._dataset.equipment}`;
         } else {
-            this._url = `/profile`;
-            this._title = "Profil hinzufügen";
+            this._url = `/booking`;
+            this._title = "Buchung hinzufügen";
         }
 
         // Platzhalter im HTML-Code ersetzen
         let html = this._mainElement.innerHTML;
-        html = html.replace("$LAST_NAME$", this._dataset.last_name);
-        html = html.replace("$FIRST_NAME$", this._dataset.first_name);
-        html = html.replace("$PHONE$", this._dataset.phone);
-        html = html.replace("$EMAIL$", this._dataset.email);
+        html = html.replace("$COURT$", this._dataset.court);
+        html = html.replace("$EQUIPMENT$", this._dataset.equipment);
+        html = html.replace("$TIME$", this._dataset.time);
+        html = html.replace("$NAME_COACH$", this._dataset.name_coach);
+        html = html.replace("$MEMBER$", this._dataset.member);
         this._mainElement.innerHTML = html;
 
         // Event Listener registrieren
@@ -76,10 +79,11 @@ export default class ProfileEdit extends Page {
         saveButton.addEventListener("click", () => this._saveAndExit());
 
         // Eingabefelder zur späteren Verwendung merken
-        this._firstNameInput = this._mainElement.querySelector("input.first_name");
-        this._lastNameInput  = this._mainElement.querySelector("input.last_name");
-        this._phoneInput     = this._mainElement.querySelector("input.phone");
-        this._emailInput     = this._mainElement.querySelector("input.email");
+        this._courtInput = this._mainElement.querySelector("input.court");
+        this._equipmentInput  = this._mainElement.querySelector("input.equipment");
+        this._timeInput     = this._mainElement.querySelector("input.time");
+        this._name_coachInput     = this._mainElement.querySelector("input.name_coach");
+        this._memberInput     = this._mainElement.querySelector("input.member");
     }
 
     /**
@@ -89,18 +93,31 @@ export default class ProfileEdit extends Page {
     async _saveAndExit() {
         // Eingegebene Werte prüfen
         this._dataset._id        = this._editId;
-        this._dataset.first_name = this._firstNameInput.value.trim();
-        this._dataset.last_name  = this._lastNameInput.value.trim();
-        this._dataset.phone      = this._phoneInput.value.trim();
-        this._dataset.email      = this._emailInput.value.trim();
+        this._dataset.court = this._courtInput.value.trim();
+        this._dataset.equipment  = this._equipmentInput.value.trim();
+        this._dataset.time     = this._timeInput.value.trim();
+        this._dataset.name_coach      = this._name_coachInput.value.trim();
+        this._dataset.member      = this._memberInput.value.trim();
 
-        if (!this._dataset.first_name) {
-            alert("Geben Sie erst einen Vornamen ein.");
+        if (!this._dataset.court) {
+            alert("Geben Sie erst einen Platz ein.");
             return;
         }
 
-        if (!this._dataset.last_name) {
-            alert("Geben Sie erst einen Nachnamen ein.");
+        if (!this._dataset.equipment) {
+            alert("Geben Sie die Ausstattung ein.");
+            return;
+        }
+        if (!this._dataset.time) {
+            alert("Geben Sie Buchungszeitraum ein.");
+            return;
+        }
+        if (!this._dataset.name_coach) {
+            alert("Geben Sie den Trainernamen ein.");
+            return;
+        }
+        if (!this._dataset.member) {
+            alert("Geben Sie den Mitgliedsnamen ein.");
             return;
         }
 

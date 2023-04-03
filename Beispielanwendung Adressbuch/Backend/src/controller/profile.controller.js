@@ -1,30 +1,30 @@
 "use strict"
 
-import AddressService from "../service/address.service.js";
+import ProfileService from "../service/profile.service.js";
 import {wrapHandler} from "../utils.js";
 import RestifyError from "restify-errors";
 
 /**
- * HTTP-Controller-Klasse für Adressbucheinträge. Diese Klasse registriert
+ * HTTP-Controller-Klasse für Profileinträge. Diese Klasse registriert
  * alle notwendigen URL-Handler beim Webserver für einen einfachen REST-
- * Webservice zum Lesen und Schreiben von Adressen.
+ * Webservice zum Lesen und Schreiben von Profilen.
  */
-export default class AddressController {
+export default class ProfileController {
     /**
-     * Konstruktor. Hier werden die URL-Handler registriert.
+     * Konstruktor. Hier werden die URL-Handler registrert.
      *
      * @param {Object} server Restify Serverinstanz
      * @param {String} prefix Gemeinsamer Prefix aller URLs
      */
     constructor(server, prefix) {
-        this._service = new AddressService();
+        this._service = new ProfileService();
         this._prefix = prefix;
 
-        // Collection: Adressen
+        // Collection: Profile
         server.get(prefix, wrapHandler(this, this.search));
         server.post(prefix, wrapHandler(this, this.create));
 
-        // Entity: Adresse
+        // Entity: Profil
         server.get(prefix + "/:id", wrapHandler(this, this.read));
         server.put(prefix + "/:id", wrapHandler(this, this.update));
         server.patch(prefix + "/:id", wrapHandler(this, this.update));
@@ -37,7 +37,7 @@ export default class AddressController {
      * hinzugefügt, damit ein Client erkennen kann, wie er die Entität lesen,
      * ändern oder löschen kann.
      *
-     * @param {Object} entity Zu verändernder Datensatz
+     * @param {Object} entity Zu verändernder Datensatz.
      */
     _insertHateoasLinks(entity) {
         let url = `${this._prefix}/${entity._id}`;
@@ -51,8 +51,8 @@ export default class AddressController {
     }
 
     /**
-     * GET /address
-     * Adressen suchen
+     * GET /profil
+     * Profile suchen
      */
     async search(req, res, next) {
         let result = await this._service.search(req.query);
@@ -62,8 +62,8 @@ export default class AddressController {
     }
 
     /**
-     * POST /address
-     * Neue Adresse anlegen
+     * POST /profil
+     * Neues Profil anlegen
      */
     async create(req, res, next) {
         let result = await this._service.create(req.body);
@@ -77,8 +77,8 @@ export default class AddressController {
     }
 
     /**
-     * GET /address/:id
-     * Adresse auslesen
+     * GET /profil/:id
+     * Profile auslesen
      */
     async read(req, res, next) {
         let result = await this._service.read(req.params.id);
@@ -87,16 +87,16 @@ export default class AddressController {
             this._insertHateoasLinks(result);
             res.sendResult(result);
         } else {
-            throw new RestifyError.NotFoundError("Adresse nicht gefunden");
+            throw new RestifyError.NotFoundError("Profil nicht gefunden");
         }
 
         return next();
     }
 
     /**
-     * PUT /address/:id
-     * PATCH /address/:id
-     * Adresse ändern
+     * PUT /profil/:id
+     * PATCH /profil/:id
+     * Profil ändern
      */
     async update(req, res, next) {
         let result = await this._service.update(req.params.id, req.body);
@@ -105,15 +105,15 @@ export default class AddressController {
             this._insertHateoasLinks(result);
             res.sendResult(result);
         } else {
-            throw new RestifyError.NotFoundError("Adresse nicht gefunden");
+            throw new RestifyError.NotFoundError("Profil nicht gefunden");
         }
 
         return next();
     }
 
     /**
-     * DELETE /address/:id
-     * Adresse löschen
+     * DELETE /profil/:id
+     * Profil löschen
      */
     async delete(req, res, next) {
         await this._service.delete(req.params.id)

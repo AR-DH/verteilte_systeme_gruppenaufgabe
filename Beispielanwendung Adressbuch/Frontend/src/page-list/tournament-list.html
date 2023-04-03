@@ -12,10 +12,10 @@
         padding: 1em;
         padding-bottom: 0.5em;
 
-        background-color: white;
+        background-color: rgb(255, 255, 255);
         transition: background-color 0.5s;
 
-        border: 0px solid lightgrey;
+        border: 0px solid rgb(187, 183, 183);
         border-bottom-width: 1px;
     }
 
@@ -73,13 +73,13 @@
         <!-- Vorlage für einen Eintrag in der Liste -->
         <li class="list-entry" data-id="$ID$">
             <div class="name">
-                $LAST_NAME$, $FIRST_NAME$
+                $TOURNAMENT_NAME$
             </div>
-            <div class="field phone">
-                $PHONE$
+            <div class="field tournament_court">
+                $TOURNAMENT_COURT$
             </div>
-            <div class="field email">
-                $EMAIL$
+            <div class="field date">
+                $DATE$
             </div>
             <div class="actions">
                 <div class="action edit">
