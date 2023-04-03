@@ -113,28 +113,28 @@ class DatabaseFactory {
         if (await tournaments.estimatedDocumentCount() === 0) {
             tournaments.insertMany([
                 {
-                    tournament_name: "Karlsruhe-Open",
-                    tournament_court: "8-hole",
+                    tournament_name: "Kreisliga",
+                    tournament_court: "Naturrasen-Platz",
                     date: "02.04.2023",
                 },
                 {
-                    tournament_name: "SAP-Open",
-                    tournament_court: "16-hole",
+                    tournament_name: "C-Junioren Spieltag 13",
+                    tournament_court: "Kunstrasen-Platz",
                     date: "09.04.2023",
                 },
                 {
-                    tournament_name: "Baden-Open",
-                    tournament_court: "8-hole",
+                    tournament_name: "Württemberg-Cup",
+                    tournament_court: "Naturrasen-Platz",
                     date: "10.04.2023",
                 },
                 {
                     tournament_name: "Deutsche Meisterschaft",
-                    tournament_court: "16-hole",
+                    tournament_court: "Naturrasen-Platz",
                     date: "16.04.2023",
                 },
                 {
                     tournament_name: "Kids-Cup",
-                    tournament_court: "4-hole",
+                    tournament_court: "Aschenplatz",
                     date: "23.04.2023",
                 },
                 
