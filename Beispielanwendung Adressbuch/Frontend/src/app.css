@@ -91,3 +91,59 @@ nav li:hover {
     border: 0px solid rgb(103, 197, 231);
     border-bottom-width: 3px;
 }
+@media screen and (min-width: 742px) {
+    .hidden {
+        display: none;
+    }
+    body{
+        margin: 0 0 0 200px;
+    }
+    .nav {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 200px;
+        height: 100%;
+        background-color: black;
+        justify-content: center;
+        align-items: stretch;
+    }
+    .nav > ul {
+        display: block;
+        margin: 0 0 0 0 ;
+        padding: 0 0 0 0;
+    }
+
+    .nav > ul > li{ 
+        font-size: 18px;
+        width: 100%;
+        font-family: 'Quicksand', sans-serif;
+        list-style: none;
+        text-align: center;
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+    .nav > ul > li:hover{
+        cursor: pointer;
+        background-color: #505050;
+        border-right: 5px #1ed760 solid;  
+    } 
+    .nav > ul > li > a {
+        text-decoration: none;
+        color: white;
+        font-size: 20px;
+    }
+    .img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: flex;
+        justify-content: center;
+    }
+    .img > img {
+        max-width: 200px;
+    }
+
+}
