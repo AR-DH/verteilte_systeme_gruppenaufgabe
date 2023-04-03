@@ -48,7 +48,7 @@ export default class ProfileService {
         let newProfil = {
             first_name: profil.first_name || "",
             last_name: profil.last_name ||"",
-            profil_phone: profil.profil_phone || "",
+            profil_phone: profil.phone || "",
             date: profil.email || "",
         };
 
