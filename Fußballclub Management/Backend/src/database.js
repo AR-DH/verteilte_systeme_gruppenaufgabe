@@ -39,22 +39,22 @@ class DatabaseFactory {
         if (await profiles.estimatedDocumentCount() === 0) {
             profiles.insertMany([
                 {
-                    first_name: "Salih",
-                    last_name: "Kut",
+                    first_name: "Laura",
+                    last_name: "Müller",
                     phone: "+49 711 564412",
-                    email: "salih.kut@abc.com",
+                    email: "laura.mueller@abc.com",
                 },
                 {
-                    first_name: "Mirac",
-                    last_name: "Asal",
+                    first_name: "Jasmin",
+                    last_name: "Meier",
                     phone: "+49 721 554194",
-                    email: "mirac@asal.com",
+                    email: "jasmin@meier.com",
                 },
                 {
                     first_name: "Luca",
-                    last_name: "D'Oria",
+                    last_name: "Hollandaise",
                     phone: "+49 721 553181",
-                    email: "luca@doria.com",
+                    email: "luca@hollandaise.com",
                 },
                 {
                     first_name: "Dietmar",
@@ -63,49 +63,49 @@ class DatabaseFactory {
                     email: "hopp@sap.com",
                 },
                 {
-                    first_name: "Warren",
-                    last_name: "Buffet",
+                    first_name: "Rolf-Dieter",
+                    last_name: "Härter",
                     phone: "+49 721 957338",
-                    email: "buffet@berkshire.com",
+                    email: "itil-weiterbildung@gmail.com",
                 },
             ]);
         }
         if (await bookings.estimatedDocumentCount() === 0) {
             bookings.insertMany([
                 {
-                    court: "8-hole",
-                    equipment: "3x Golfschläger, 15x Golfbälle",
+                    court: "Feld Kirrlach",
+                    equipment: "5x Fußbälle",
                     time: "17:00-20:00, 01.01.2023",
-                    name_coach: "Tiger Woods",
+                    name_coach: "Bastian Schweinsteiger",
                     member: "Mirac Asal",
                 },
                 {
-                    court: "16-hole",
-                    equipment: "1x Golfschläger, 30x Golfbälle",
+                    court: "Halle 1 Kirrlach Mitte",
+                    equipment: "4x Fußbälle",
                     time: "19:00-21:00, 03.01.2023",
-                    name_coach: "Tiger Woods",
-                    member: "Salih Kut",
+                    name_coach: "Sebastian Rudy",
+                    member: "Kai Simon, Luca Hollandaise, Kai Heneka",
                 },
                 {
-                    court: "8-hole",
-                    equipment: "1x Golfkart, 15x Golfbälle",
+                    court: "Feld Kirrlach",
+                    equipment: "3x Fußbälle",
                     time: "17:00-19:00, 01.01.2023",
-                    name_coach: "Kevin James",
-                    member: "Luca D'Oria",
+                    name_coach: "Sebastian Rudy",
+                    member: "Manuel Müller",
                 },
                 {
-                    court: "Schlagplatz",
-                    equipment: "3x Golfschläger, 30x Golfbälle",
+                    court: "Halle 2 Kirrlach Mitte",
+                    equipment: "5x Fußbälle",
                     time: "17:00-20:00, 01.01.2023",
-                    name_coach: "Tiger Woods",
-                    member: "Dietmar Hopp",
+                    name_coach: "Michael Klose",
+                    member: "Dietmar Hopp, Bill Gates, Elon Musk",
                 },
                 {
-                    court: "8-hole",
-                    equipment: "1x Golfschläger, 10x Golfbälle, 1x Golftasche",
+                    court: "Dietmar-Hopp-Halle St.Leon-Rot",
+                    equipment: "3x Bälle, 20x Hütchen",
                     time: "14:00-17:00, 04.01.2023",
                     name_coach: "Markus Maier",
-                    member: "Warren Buffet",
+                    member: "Markus Söder, Christian Lindner, Angela Merkel",
                 },
                 
             ]);
