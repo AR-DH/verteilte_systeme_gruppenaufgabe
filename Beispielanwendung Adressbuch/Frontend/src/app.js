@@ -37,7 +37,6 @@ class App {
                 url: "^/edit-tournament/(.*)$",
                 show: matches => this._gotoTournamentEdit(matches[1]),
             },
-            
             {
                 url: "^/edit-profile/(.*)$",
                 show: matches => this._gotoProfileEdit(matches[1]),

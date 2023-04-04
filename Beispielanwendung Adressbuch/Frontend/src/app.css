@@ -112,7 +112,7 @@ nav li:hover {
     }
     .nav > ul {
         display: block;
-        margin: 0 0 0 0 ;
+        margin: 200 0 0 0 ;
         padding: 0 0 0 0;
     }
 
@@ -122,13 +122,11 @@ nav li:hover {
         font-family: 'Quicksand', sans-serif;
         list-style: none;
         text-align: center;
-        padding-top: 20px;
-        padding-bottom: 20px;
     }
     .nav > ul > li:hover{
         cursor: pointer;
         background-color: #505050;
-        border-right: 5px #1ed760 solid;  
+        border-right: 5px #d7ac1e solid;  
     } 
     .nav > ul > li > a {
         text-decoration: none;
@@ -141,6 +139,7 @@ nav li:hover {
         left: 0;
         display: flex;
         justify-content: center;
+        margin-bottom: 200px;
     }
     .img > img {
         max-width: 200px;
