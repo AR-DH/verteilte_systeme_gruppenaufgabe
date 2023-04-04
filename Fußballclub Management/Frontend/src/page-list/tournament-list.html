@@ -1,10 +1,20 @@
 <!-- Stylesheet der Seite -->
 <style>
     /* LISTENEINTRÄGE */
+    main {
+        display: flex;
+    }
     main ol {
+        flex-basis: 50%;
         list-style: none;
         margin: 0;
         padding: 0;
+        flex-direction: column;
+    }
+    .square {
+        flex-basis: 50%;
+        padding: 10px 10px 10px 10px;
+        font-size: 18px;
     }
 
     main li {
@@ -37,7 +47,7 @@
         padding: 0.5em;
         margin: 0.5em;
 
-        background-color: #bad3bc;
+        background-color: #d7ac1e;
         transition: background-color 0.5s;
 
         flex: 1;
@@ -82,13 +92,17 @@
                 $DATE$
             </div>
             <div class="actions">
-                <div class="action edit">
-                    <a>✎</a>
-                </div>
                 <div class="action delete">
                     <a>✖</a>
                 </div>
             </div>
         </li>
     </ol>
+    <div class="square">
+<b>Informationen zum Turnieren:</b>
+
+Alle Turniere sind offen für Spieler aller Fähigkeitsstufen und Altersgruppen. 
+Es wird erwartet, dass die Teilnehmer die Spielregeln einhalten und ein respektvolles Verhalten zeigen.
+Wir freuen uns darauf, Sie bei unseren Turnieren begrüßen zu dürfen!
+    </div>
 </main>
