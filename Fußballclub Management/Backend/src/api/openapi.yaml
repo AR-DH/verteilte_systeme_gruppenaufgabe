@@ -1,14 +1,14 @@
 openapi: 3.1.2
 info:
-  title: Golfclub-Management
+  title: Fußballclub-Management
   version: 1.0.0
-  description: "Die Golfclub-Management-Anwendung nutzt einen simplen REST-Webservice\
+  description: "Die Fußballclub-Management-Anwendung nutzt einen simplen REST-Webservice\
     \ zur Kommunikation mit dem Backend. Dieser ermöglicht die üblichen CRUD-Operationen\
     \ zur Anzeige und Bearbeitung von Mitgliedschaften, wobei jede Mitgliedschaft\
     \ aus einem Vornamen, Nachnamen, Telefonnummer und E-Mailadresse besteht. Auß\
-    erdem ermöglicht er eine Buchungsmöglichkeit, die Felder für Golfplatz, Equipment,\
+    erdem ermöglicht er eine Buchungsmöglichkeit, die Felder für Fußballplatz, Equipment,\
     \ Vorname und Nachname eines Coachs, den Preis und eine Zeit enthält. Des Weiteren\
-    \ gibt es eine Anzeige für Golfturniere mit anschließender Anmeldemöglichkeit,\
+    \ gibt es eine Anzeige für Fußballtuniere mit anschließender Anmeldemöglichkeit,\
     \ die aus einem Turniernamen, einem Turnierplatz, einem Datum und dem Vor- und\
     \ Nachnamen des Teilnehmers besteht."
 servers:
@@ -165,7 +165,7 @@ paths:
       description: Creates a new instance of a `booking`.
     parameters:
     - name: court
-      description: Golfplatz zum Buchen
+      description: Fußballplatz zum Buchen
       schema:
         type: string
       in: query
@@ -272,7 +272,7 @@ paths:
       description: Gets a list of all `tournament` entities.
     post:
       requestBody:
-        description: A new `trournament-list` to be created.
+        description: A new `tournament-list` to be created.
         content:
           application/json:
             schema:
@@ -392,7 +392,7 @@ components:
         phone: +49 846 029461
     booking:
       title: Root Type for booking
-      description: "Buchungsliste von Equipment, Platz und Golfcoach"
+      description: "Buchungsliste von Equipment, Platz und Fußballtrainer"
       type: object
       properties:
         court:

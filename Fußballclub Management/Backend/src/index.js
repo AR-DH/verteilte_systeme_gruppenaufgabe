@@ -101,7 +101,7 @@ new ProfileController(server, "/profile");
 server.listen(config.port, config.host, function() {
     console.log();
     console.log("=================");
-    console.log("Golfclub-Server");
+    console.log("Fußballclub-Server");
     console.log("=================");
     console.log();
     console.log("Ausführung mit folgender Konfiguration:");
