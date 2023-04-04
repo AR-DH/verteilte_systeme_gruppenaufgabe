@@ -27,7 +27,7 @@ class App {
                 show: () => this._gotoTournamentList()
             },
             {
-                url: "^/profiles",
+                url: "^/profile",
                 show: () => this._gotoProfileList()
             },
             {
