@@ -1,7 +1,7 @@
 {
-    "name": "golfclub-frontent",
+    "name": "fußballclub-frontent",
     "version": "1.0.0",
-    "description": "Golfclub: Frontend",
+    "description": "fußballclub: Frontend",
     "author": "Dennis Schulmeister-Zimolong",
     "license": "CC-BY-4.0",
     "type": "module",
