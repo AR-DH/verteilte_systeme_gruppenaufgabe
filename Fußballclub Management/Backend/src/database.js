@@ -77,7 +77,7 @@ class DatabaseFactory {
                     equipment: "5x Fußbälle",
                     time: "17:00-20:00, 01.01.2023",
                     name_coach: "Bastian Schweinsteiger",
-                    member: "Mirac Asal",
+                    member: "Marc Schnatterer",
                 },
                 {
                     court: "Halle 1 Kirrlach Mitte",
