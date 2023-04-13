@@ -36,7 +36,7 @@ export default class BookingList extends Page {
     async init() {
         // HTML-Inhalt nachladen
         await super.init();
-        this._title = "Profil Übersicht";
+        this._title = "Buchung Übersicht";
 
         // Platzhalter anzeigen, wenn noch keine Daten vorhanden sind
         let data = await this._app.backend.fetch("GET", "/booking");
@@ -79,7 +79,7 @@ export default class BookingList extends Page {
 
     /**
      * Löschen des übergebenen Buchungen. Zeigt einen Popup, ob der Anwender
-     * das Profil löschen will und löscht diese dann.
+     * die Buchung löschen will und löscht diese dann.
      *
      * @param {Integer} id ID des zu löschenden Datensatzes
      */
